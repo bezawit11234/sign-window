@@ -26,6 +26,7 @@ final class VideoDownloader {
 
   /// Cache of resolved Drive URLs to allow instant playback
   static final Map<String, String> _resolvedUrlCache = {};
+  static const Duration _resolvedUrlCacheLifetime = Duration(hours: 3);
 
   static String driveDirectUrl(String fileId) =>
       'https://drive.google.com/uc?export=download&id=$fileId';
@@ -129,16 +130,10 @@ final class VideoDownloader {
 
   /// Removes the in-memory and persistent resolved-URL cache for [fileId].
   /// Call this before retrying a video that returned a 403 / expired URL.
-  static void evictCachedUrl(String fileId) {
+  static Future<void> evictCachedUrl(String fileId) async {
     _resolvedUrlCache.remove(fileId);
-    _evictPersistentCache(fileId);
-  }
-
-  static void _evictPersistentCache(String fileId) {
-    // Fire-and-forget: remove without awaiting
-    _initPrefs().then((_) {
-      _prefs?.remove('resolved_drive_$fileId');
-    }).catchError((_) {});
+    await _initPrefs();
+    await _prefs?.remove('resolved_drive_$fileId');
   }
 
   void _startBackgroundDownload(String driveId, String destinationPath) {
@@ -226,27 +221,12 @@ final class VideoDownloader {
       return;
     }
 
-    final resolved = await _resolveDownloadTarget(fileId, cancelToken);
-    final url = (resolved as _StreamUrl).url;
-    var resumeFrom = 0;
-    if (await dest.exists()) {
-      resumeFrom = await dest.length();
-    }
-
-    await _streamDownloadWithResume(
-      url: url,
+    await _downloadDriveWithResume(
+      fileId: fileId,
       destination: dest,
-      resumeFrom: resumeFrom,
       onProgress: onProgress,
       cancelToken: cancelToken,
     );
-    if (!await isValidVideoFile(dest)) {
-      await dest.delete();
-      throw StateError(
-        'Drive file $fileId did not download as video. '
-        'Share it as "Anyone with the link".',
-      );
-    }
   }
 
   /// Downloads a video (either a Google Drive ID/URL or a standard web URL) to the local file system.
@@ -266,17 +246,9 @@ final class VideoDownloader {
 
     final driveId = parseDriveFileId(urlOrFileId);
     if (driveId != null) {
-      final resolved = await _resolveDownloadTarget(driveId, cancelToken);
-      final url = (resolved as _StreamUrl).url;
-      var resumeFrom = 0;
-      if (await dest.exists()) {
-        resumeFrom = await dest.length();
-      }
-
-      await _streamDownloadWithResume(
-        url: url,
+      await _downloadDriveWithResume(
+        fileId: driveId,
         destination: dest,
-        resumeFrom: resumeFrom,
         onProgress: onProgress,
         cancelToken: cancelToken,
       );
@@ -293,6 +265,66 @@ final class VideoDownloader {
         cancelToken: cancelToken,
       );
     }
+  }
+
+  Future<void> _downloadDriveWithResume({
+    required String fileId,
+    required File destination,
+    void Function(int received, int total)? onProgress,
+    CancelToken? cancelToken,
+  }) async {
+    final hadCachedUrl = _resolvedUrlCache.containsKey(fileId) ||
+        await _getPersistentCache(fileId) != null;
+
+    Future<void> download() async {
+      final resolved = await _resolveDownloadTarget(fileId, cancelToken);
+      var resumeFrom = 0;
+      if (await destination.exists()) {
+        resumeFrom = await destination.length();
+      }
+
+      await _streamDownloadWithResume(
+        url: (resolved as _StreamUrl).url,
+        destination: destination,
+        resumeFrom: resumeFrom,
+        onProgress: onProgress,
+        cancelToken: cancelToken,
+      );
+      if (!await isValidVideoFile(destination)) {
+        await destination.delete();
+        throw StateError(
+          'Drive file $fileId did not download as video. '
+          'Share it as "Anyone with the link".',
+        );
+      }
+    }
+
+    try {
+      await download();
+    } catch (error) {
+      if (!hadCachedUrl || !_isStaleDriveUrlError(error)) rethrow;
+
+      debugPrint('Cached Drive URL expired for $fileId; resolving it again.');
+      await evictCachedUrl(fileId);
+      if (await destination.exists()) await destination.delete();
+      await download();
+    }
+  }
+
+  static bool _isStaleDriveUrlError(Object error) {
+    int? statusCode;
+    if (error is DioException) {
+      statusCode = error.response?.statusCode;
+    } else {
+      final match = RegExp(r'Unexpected HTTP (401|403|404|410)')
+          .firstMatch(error.toString());
+      statusCode = int.tryParse(match?.group(1) ?? '');
+      if (error.toString().contains('did not download as video')) return true;
+    }
+    return statusCode == 401 ||
+        statusCode == 403 ||
+        statusCode == 404 ||
+        statusCode == 410;
   }
 
   /// First hop: small HTML (virus scan) vs immediate binary (small files).
@@ -577,10 +609,8 @@ final class VideoDownloader {
       final timestamp = json['timestamp'] as int;
       final url = json['url'] as String;
       
-      // Google Drive links are valid for at least 4 hours.
-      // Let's use a safe threshold of 3 hours (10,800,000 milliseconds).
       final now = DateTime.now().millisecondsSinceEpoch;
-      if (now - timestamp < 6 * 3600 * 1000) {
+      if (now - timestamp < _resolvedUrlCacheLifetime.inMilliseconds) {
         return url;
       }
     } catch (_) {}

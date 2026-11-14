@@ -1123,7 +1123,7 @@ class _LessonVideoPlayerCardState extends State<LessonVideoPlayerCard>
     if (u != null && u.isNotEmpty) {
       final driveId = VideoDownloader.parseDriveFileId(u);
       if (driveId != null) {
-        VideoDownloader.evictCachedUrl(driveId);
+        await VideoDownloader.evictCachedUrl(driveId);
         debugPrint('Evicted stale Drive URL cache for $driveId before retry.');
       }
     }
