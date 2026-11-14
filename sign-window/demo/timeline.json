@@ -1,0 +1,11 @@
+[
+  { "start": 12, "end": 16, "signId": "f1" },
+  { "start": 16, "end": 20, "signId": "f5" },
+  { "start": 20, "end": 24, "signId": "f2" },
+  { "start": 24, "end": 32, "signId": "f6" },
+  { "start": 48, "end": 52, "signId": "f3" },
+  { "start": 52, "end": 56, "signId": "f4" },
+  { "start": 56, "end": 60, "signId": "f12" },
+  { "start": 68, "end": 74, "signId": "f15" },
+  { "start": 76, "end": 84, "signId": "f17" }
+]

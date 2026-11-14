@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Check a certificate — Miliket</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body class="kit">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <span>
+        <span class="brand-name">Miliket</span>
+        <span class="brand-sub">Accessible Learning Media Kit</span>
+      </span>
+    </a>
+    <nav class="topnav" aria-label="Lesson pages">
+      <a href="index.html">Lesson</a>
+      <a href="transcript.html">Transcript</a>
+      <a href="job.html">Job card</a>
+    </nav>
+    <div class="tool-group" role="group" aria-label="Text size">
+      <button type="button" id="text-smaller">A−<span class="visually-hidden"> smaller</span></button>
+      <button type="button" id="text-larger">A+<span class="visually-hidden"> larger</span></button>
+    </div>
+  </header>
+  <main id="main" class="shell single">
+    <article class="card">
+      <h1>Check a certificate</h1>
+      <p>Demo records only. This page is not a real certificate authority.</p>
+      <form method="get" action="verify.html">
+        <label for="cert-id">Certificate ID</label>
+        <input id="cert-id" name="id" autocomplete="off" required>
+        <button type="submit">Check certificate</button>
+      </form>
+      <div id="result" aria-live="polite"></div>
+      <p><a class="button" href="verify.html?id=ETH-2026-001">Try sample ID ETH-2026-001</a></p>
+      <noscript>
+        <p>JavaScript is required to read the certificate file. The demo IDs are ETH-2026-001 and ETH-2026-002.</p>
+      </noscript>
+    </article>
+  </main>
+  <script src="kit.js"></script>
+  <script src="verify.js"></script>
+</body>
+</html>

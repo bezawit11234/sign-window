@@ -1,0 +1,14 @@
+{
+  "ETH-2026-001": {
+    "valid": true,
+    "name": "Hana Bekele",
+    "date": "2026-11-01",
+    "course": "Ethiopian Sign Language: greetings and numbers"
+  },
+  "ETH-2026-002": {
+    "valid": false,
+    "name": "Samuel Tadesse",
+    "date": "2026-10-02",
+    "course": "Ethiopian Sign Language: greetings and numbers"
+  }
+}

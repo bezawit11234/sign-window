@@ -1,0 +1,37 @@
+Put real media in these places. Keep the file names.
+
+demo/lesson.mp4
+  The lesson film. MP4, H.264, with sound if the lesson is spoken.
+  Replace the placeholder. About 360 pixels tall is enough for a phone.
+
+demo/en.vtt
+  English captions. WebVTT. Times must match the lesson.
+
+demo/am.vtt
+  Amharic captions. WebVTT. A fluent speaker must check the words.
+  Amharic letters are already supported by the font in player/fonts.
+
+demo/ad.vtt
+  Audio description script. WebVTT. One sentence about what is on screen.
+  Optional per cue: a second line AUDIO:clip.mp3
+
+demo/audio-description.mp3
+  Optional. One recording of the descriptions. If you skip it, the player
+  speaks ad.vtt with the phone's own voice.
+
+demo/signs/g1.mp4 and the other ids
+  One silent or quiet MP4 per dictionary sign. The file name is the id in
+  demo/signs.json, for example demo/signs/g1.mp4 for Hello.
+  The lesson uses g1, g3, g8, g11, n2, n3, n4, and g6.
+  Download them with: node scripts/download-videos.js g1 g3 g8 g11 n2 n3 n4 g6
+
+demo/job-summary.mp3
+  Optional recording of the job summary. If you skip it, the job page
+  speaks the summary text with the phone's own voice.
+
+demo/certificates.json
+  Certificate records. Already has two demo ids. Edit the name, date, and
+  valid true or false. Do not put real private data in a public demo.
+
+demo/timeline.json
+  When each sign id appears, in seconds. Already filled for this lesson.

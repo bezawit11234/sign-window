@@ -1,0 +1,27 @@
+{
+  "name": "sign-window",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Embeddable accessible Ethiopian Sign Language lesson player.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node --test test/vtt.test.js test/transcript.test.js test/timeline.test.js test/api.test.js",
+    "a11y": "playwright test",
+    "copy-fonts": "node scripts/copy-fonts.js",
+    "generate-signs": "node scripts/generate-signs.js",
+    "placeholder-video": "node scripts/placeholder-video.js",
+    "download-videos": "node scripts/download-videos.js"
+  },
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@fontsource/noto-sans-ethiopic": "^5.2.5",
+    "@playwright/test": "^1.49.1"
+  }
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Family signs — Miliket</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body class="kit">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+        <rect width="40" height="40" rx="10" fill="#ffe14a"></rect>
+        <path d="M10 26 V14 h8 a6 6 0 0 1 0 12z M22 14 h8 v4 h-4 v8 h-4z" fill="#0a3d91"></path>
+      </svg>
+      <span>
+        <span class="brand-name">Miliket</span>
+        <span class="brand-sub">Accessible Learning Media Kit</span>
+      </span>
+    </a>
+    <nav class="topnav" aria-label="Sections">
+      <a href="#lesson">Learn</a>
+      <a href="#transcript">Access</a>
+      <a href="#career">Thrive</a>
+    </nav>
+  </header>
+  <div class="shell">
+    <nav class="side" aria-label="Lesson pages">
+      <a href="#lesson" aria-current="page">Lesson</a>
+      <a href="#transcript">Transcript</a>
+      <a href="#download">Download</a>
+      <a href="job.html">Career Gateway</a>
+      <a href="#help">Help</a>
+      <p class="side-note"><strong>Digital Bridge</strong><br>ALX · SNV · Mercy Corps<br>Building an inclusive Ethiopia</p>
+    </nav>
+    <main id="main">
+      <h1 id="lesson">Family signs</h1>
+      <p class="lede">A lesson filmed with Deaf youth at Yekatit 23 School in Bahir Dar. Captions are in English and Amharic. The sign window shows each family sign and can be moved, resized, or minimized.</p>
+      <script src="/player/signwindow.js"></script>
+      <sign-window
+        video="lesson.mp4"
+        captions-en="en.vtt"
+        captions-am="am.vtt"
+        descriptions="ad.vtt"
+        timeline="timeline.json"
+        signs="signs.json"></sign-window>
+      <div class="under-videos">
+        <div class="tool-group" role="group" aria-label="Caption language">
+          <span class="tool-label">Captions</span>
+          <button type="button" data-caption="en" aria-pressed="false">English</button>
+          <button type="button" data-caption="am" lang="am" aria-pressed="false">አማርኛ</button>
+          <button type="button" data-caption="both" aria-pressed="false">Both</button>
+        </div>
+        <div class="tool-group" role="group" aria-label="Text size">
+          <span class="tool-label">Text</span>
+          <button type="button" id="text-smaller">A−<span class="visually-hidden"> smaller</span></button>
+          <button type="button" id="text-larger">A+<span class="visually-hidden"> larger</span></button>
+        </div>
+        <div class="tool-group" role="group" aria-label="Colour theme">
+          <span class="tool-label">Theme</span>
+          <button type="button" data-theme-choice="blue" aria-pressed="true">Blue</button>
+          <button type="button" data-theme-choice="gold" aria-pressed="false">Gold</button>
+          <button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
+        </div>
+      </div>
+
+      <section class="card" id="transcript" aria-labelledby="transcript-title">
+        <div class="card-head">
+          <h2 id="transcript-title">Transcript</h2>
+          <div class="card-actions">
+            <a href="transcript.html">Open the text page</a>
+            <a href="/api/offline-pack">Offline pack</a>
+          </div>
+        </div>
+        <p>Choose a line to jump to that moment. English and Amharic are both written out.</p>
+        <div class="cue-list" id="cue-list"></div>
+      </section>
+
+      <section class="card" id="describe" aria-labelledby="ad-title">
+        <h2 id="ad-title">Audio description</h2>
+        <p>Optional. A voice describes what is on screen. The same words also appear under the video.</p>
+        <button type="button" id="ad-toggle" aria-pressed="false">Turn audio description on</button>
+        <p id="ad-status" aria-live="polite"></p>
+      </section>
+
+      <section class="card" id="download" aria-labelledby="download-title">
+        <h2 id="download-title">Download</h2>
+        <p>Save the captions, transcript, and lesson for a time without a connection.</p>
+        <p><a class="button" href="/api/offline-pack">Download offline pack</a></p>
+      </section>
+
+      <section class="card" id="help" aria-labelledby="help-title">
+        <h2 id="help-title">Help</h2>
+        <p>When the player is focused: Space or K plays or pauses, Left and Right seek 5 seconds, M mutes, C changes captions, F is full screen. Arrow keys move the sign window when Move is focused. Shift plus an arrow key moves it further.</p>
+      </section>
+    </main>
+    <aside class="career" id="career" aria-labelledby="career-title">
+      <section class="card career-card">
+        <h2 id="career-title">Career Gateway</h2>
+        <p class="job-title">Community sign language tutor</p>
+        <p>Addis Ababa Community Learning Centre</p>
+        <p><span class="badge">Open</span></p>
+        <h3>What the employer offers</h3>
+        <ul>
+          <li>Ethiopian Sign Language interpretation</li>
+          <li>Captions on meetings</li>
+          <li>A quiet room and flexible hours</li>
+        </ul>
+        <button type="button" id="listen-job">Listen to job summary</button>
+        <p id="job-status" aria-live="polite"></p>
+        <p id="job-summary">Community sign language tutor. Employer: Addis Ababa Community Learning Centre. Location: Addis Ababa, with remote work possible. Deadline: 30 November 2026. The employer offers Ethiopian Sign Language interpretation, captions on all meetings, a quiet room, and flexible hours.</p>
+        <p><a class="button" href="job.html">Open the job card</a></p>
+        <p><a href="verify.html?id=ETH-2026-001">Check a sample certificate</a></p>
+      </section>
+    </aside>
+  </div>
+  <script src="kit.js"></script>
+  <script src="lesson.js"></script>
+</body>
+</html>

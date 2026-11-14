@@ -1,0 +1,129 @@
+openapi: 3.0.3
+info:
+  title: Sign Window
+  version: 1.0.0
+  description: |
+    Small API for the Sign Window lesson player.
+    The server does not call other sites and does not log request bodies.
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/signs:
+    get:
+      summary: List EthSL dictionary signs
+      responses:
+        '200':
+          description: The demo dictionary
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required: [id, en, am, category, video]
+                  properties:
+                    id:
+                      type: string
+                    en:
+                      type: string
+                    am:
+                      type: string
+                    category:
+                      type: string
+                    video:
+                      type: string
+                      description: Path of the sign clip, relative to signs.json
+  /api/transcript:
+    post:
+      summary: Turn WebVTT into an HTML transcript
+      parameters:
+        - in: query
+          name: lang
+          schema:
+            type: string
+            enum: [en, am]
+          description: Language of the HTML page. Anything else becomes en.
+        - in: query
+          name: title
+          schema:
+            type: string
+            maxLength: 120
+      requestBody:
+        required: true
+        content:
+          text/vtt:
+            schema:
+              type: string
+          text/plain:
+            schema:
+              type: string
+          application/json:
+            schema:
+              type: object
+              required: [vtt]
+              properties:
+                vtt:
+                  type: string
+      responses:
+        '200':
+          description: Accessible HTML transcript
+          content:
+            text/html:
+              schema:
+                type: string
+        '400':
+          description: The body is missing or is not WebVTT
+        '413':
+          description: The body is larger than 512 KB
+  /api/offline-pack:
+    get:
+      summary: Zip a light transcript, captions, and audio if a file exists
+      parameters:
+        - in: query
+          name: lesson
+          schema:
+            type: string
+            default: greetings-numbers
+          description: Only greetings-numbers is available. Other ids are rejected.
+      responses:
+        '200':
+          description: Zip file
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Unknown lesson id
+  /api/certificates/{id}:
+    get:
+      summary: Check whether a certificate id is valid
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The certificate record
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [id, valid, name, date, course]
+                properties:
+                  id:
+                    type: string
+                  valid:
+                    type: boolean
+                  name:
+                    type: string
+                  date:
+                    type: string
+                  course:
+                    type: string
+        '400':
+          description: The id contains characters that are not allowed
+        '404':
+          description: No record for that id

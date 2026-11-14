@@ -1,0 +1,706 @@
+[
+  {
+    "id": "g1",
+    "en": "Hello",
+    "am": "ሰላም",
+    "category": "greetings",
+    "video": "signs/g1.mp4",
+    "driveId": "18XAAByir3Ox_dvfy0l8FUArHAkkD9ImL"
+  },
+  {
+    "id": "g2",
+    "en": "Thanks to God",
+    "am": "ለኢሳ አመሰግናለሁ",
+    "category": "greetings",
+    "video": "signs/g2.mp4",
+    "driveId": "15npLz50wEzN17RgB1LTxZOFD-trCPc4B"
+  },
+  {
+    "id": "g3",
+    "en": "Good morning",
+    "am": "እንደምን አደሩ",
+    "category": "greetings",
+    "video": "signs/g3.mp4",
+    "driveId": "1ubLVSoMB1Ahr6YDjh-mXJDsTlO7DTemC"
+  },
+  {
+    "id": "g4",
+    "en": "Good afternoon",
+    "am": "ጀምብ ይመድ",
+    "category": "greetings",
+    "video": "signs/g4.mp4",
+    "driveId": "1Jq0FXl_OaMjLKJ2Gsrzg1ztLWjUJsH24"
+  },
+  {
+    "id": "g5",
+    "en": "Good night",
+    "am": "በላይ ምሕረት",
+    "category": "greetings",
+    "video": "signs/g5.mp4",
+    "driveId": "1v66K0-B6y5I1iUTIOh1ZVN1sbGJUN85A"
+  },
+  {
+    "id": "g6",
+    "en": "Bye",
+    "am": "ደህና ሁን",
+    "category": "greetings",
+    "video": "signs/g6.mp4",
+    "driveId": "1LEaru7GJo3dzY0JEVSeCQI5hXmvwWGib"
+  },
+  {
+    "id": "g7",
+    "en": "See you later",
+    "am": "ላተር ትገናኛለህ",
+    "category": "greetings",
+    "video": "signs/g7.mp4",
+    "driveId": "1LEaru7GJo3dzY0JEVSeCQI5hXmvwWGib"
+  },
+  {
+    "id": "g8",
+    "en": "How are you?",
+    "am": "እንዴት ነህ?",
+    "category": "greetings",
+    "video": "signs/g8.mp4",
+    "driveId": "1oVPwtlg94ZuT0VpZzfr42LdWF1QcpSJV"
+  },
+  {
+    "id": "g9",
+    "en": "Long time",
+    "am": "ረጅም ጊዜ",
+    "category": "greetings",
+    "video": "signs/g9.mp4",
+    "driveId": "1fdYfyHAjaJTihiUttW2bV301LbjUulE0"
+  },
+  {
+    "id": "g10",
+    "en": "Have a good day",
+    "am": "ጥሩ ቀን አግኙ",
+    "category": "greetings",
+    "video": "signs/g10.mp4",
+    "driveId": "1KmXwjTh4t0MON11VbPFnDoxHYE6hbpqW"
+  },
+  {
+    "id": "g11",
+    "en": "Fine",
+    "am": "ደህና",
+    "category": "greetings",
+    "video": "signs/g11.mp4",
+    "driveId": "1bWb2SqaznfOSTruEG8vniMKFa3p7VzHB"
+  },
+  {
+    "id": "g12",
+    "en": "Where do you live?",
+    "am": "የት ትኖራለህ?",
+    "category": "greetings",
+    "video": "signs/g12.mp4",
+    "driveId": "1NrqpFdFHy_4O9J0U8oFZkwhpc5KPmjlM"
+  },
+  {
+    "id": "g13",
+    "en": "What do you do (Job)?",
+    "am": "ምን ስራ ታደርጋለህ?",
+    "category": "greetings",
+    "video": "signs/g13.mp4",
+    "driveId": "136QT2gpqAoTXlaIvrllKi6mdNykOx9yE"
+  },
+  {
+    "id": "g14",
+    "en": "Where do you go?",
+    "am": "የት ትሄዳለህ?",
+    "category": "greetings",
+    "video": "signs/g14.mp4",
+    "driveId": "1nEmujqR38qH-gcGyQt_wqpCt18PANvwD"
+  },
+  {
+    "id": "g15",
+    "en": "Nice to meet you",
+    "am": "ሰላም ማወቅ ደስ ብሎኛል",
+    "category": "greetings",
+    "video": "signs/g15.mp4",
+    "driveId": "1B4-kFV_pBG9E1aJaXHEuGUkjOF8EGubm"
+  },
+  {
+    "id": "g16",
+    "en": "Welcome",
+    "am": "አብርሆት ወደጣ",
+    "category": "greetings",
+    "video": "signs/g16.mp4",
+    "driveId": "1JYmIGOFkydHLT1ZsaWsahI_zsjysYdOP"
+  },
+  {
+    "id": "g17",
+    "en": "Have a good time",
+    "am": "ጥሩ ጊዜ አግኙ",
+    "category": "greetings",
+    "video": "signs/g17.mp4",
+    "driveId": "11BxWkwraxLsh6BmRqEC4ueygy7uQmodi"
+  },
+  {
+    "id": "f1",
+    "en": "Mother",
+    "am": "እናት",
+    "category": "family",
+    "video": "signs/f1.mp4",
+    "driveId": "1sDiPwsldo5bNo6odsbfTCntrQUBDQgk_"
+  },
+  {
+    "id": "f2",
+    "en": "Father",
+    "am": "አባት",
+    "category": "family",
+    "video": "signs/f2.mp4",
+    "driveId": "1ESRvlcuhz5iojfVVBGInRXBP46gISdVl"
+  },
+  {
+    "id": "f3",
+    "en": "Sister",
+    "am": "እህት",
+    "category": "family",
+    "video": "signs/f3.mp4",
+    "driveId": "19gZH4a-Qdul8qeEM7PRn43l67feBdBIy"
+  },
+  {
+    "id": "f4",
+    "en": "Brother",
+    "am": "ወንድም",
+    "category": "family",
+    "video": "signs/f4.mp4",
+    "driveId": "1odohUER-VAoSmqXTWG8Iax896CGe7bKq"
+  },
+  {
+    "id": "f5",
+    "en": "Grandmother",
+    "am": "አያት",
+    "category": "family",
+    "video": "signs/f5.mp4",
+    "driveId": "17VLFlkb7O1QTtdCNy7Aygb4Cf2VSqd3R"
+  },
+  {
+    "id": "f6",
+    "en": "Grandfather",
+    "am": "ታታ",
+    "category": "family",
+    "video": "signs/f6.mp4",
+    "driveId": "1KxpwQKAPD5-EvkO2yZFJzcY6n1wCqpIu"
+  },
+  {
+    "id": "f7",
+    "en": "Child",
+    "am": "ልጅ",
+    "category": "family",
+    "video": "signs/f7.mp4",
+    "driveId": "1k3RAQJlrVBIYKXdF4nDGQlmpTVL66cEt"
+  },
+  {
+    "id": "f9",
+    "en": "Friend",
+    "am": "ጓደኛ",
+    "category": "family",
+    "video": "signs/f9.mp4",
+    "driveId": "1D0YPt4xyQY9VGIvDnghwjoFXLm1f5-rz"
+  },
+  {
+    "id": "f10",
+    "en": "Sister",
+    "am": "እህት",
+    "category": "family",
+    "video": "signs/f10.mp4",
+    "driveId": "19gZH4a-Qdul8qeEM7PRn43l67feBdBIy"
+  },
+  {
+    "id": "f12",
+    "en": "Girl",
+    "am": "ሴት ልጅ",
+    "category": "family",
+    "video": "signs/f12.mp4",
+    "driveId": "1QwK06Vx4FW-Htybahh-BavXO3xSQ8anh"
+  },
+  {
+    "id": "f13",
+    "en": "Boy",
+    "am": "ወንድ ልጅ",
+    "category": "family",
+    "video": "signs/f13.mp4",
+    "driveId": "1z8IhZzPkgDdzP_cYlhP-_oJmxjUdEuT9"
+  },
+  {
+    "id": "f14",
+    "en": "Man",
+    "am": "ወንድ",
+    "category": "family",
+    "video": "signs/f14.mp4",
+    "driveId": "1YGt3s2i-Kl9-ZttX3etg06Foxs7ASe5z"
+  },
+  {
+    "id": "f15",
+    "en": "Woman",
+    "am": "ሴት",
+    "category": "family",
+    "video": "signs/f15.mp4",
+    "driveId": "1IYMCl7SHg-U5-9nECewaL2L44ZxRxje5"
+  },
+  {
+    "id": "f17",
+    "en": "Relative",
+    "am": "ዝምድና",
+    "category": "family",
+    "video": "signs/f17.mp4",
+    "driveId": "1HopzvMUcoiqshKNnrc1EyLNsdFTKI0Kh"
+  },
+  {
+    "id": "f19",
+    "en": "Young",
+    "am": "ወጣት",
+    "category": "family",
+    "video": "signs/f19.mp4",
+    "driveId": "1zHufBT674uc-Sp8jYZYwP5uJRqLjh_GF"
+  },
+  {
+    "id": "fd1",
+    "en": "Injera",
+    "am": "እንጀራ",
+    "category": "food",
+    "video": "signs/fd1.mp4",
+    "driveId": "1mdymoVgUsoM5gs5mABcer23UGGd70pZ6"
+  },
+  {
+    "id": "fd2",
+    "en": "Bread",
+    "am": "ዳቦ",
+    "category": "food",
+    "video": "signs/fd2.mp4",
+    "driveId": "1mPSdFy8GHooXWMa7abGpbmJgAE3YPVaz"
+  },
+  {
+    "id": "fd3",
+    "en": "Flat Bread",
+    "am": "ጥንጋዳ",
+    "category": "food",
+    "video": "signs/fd3.mp4",
+    "driveId": "1Lk5RwkDz0VnLXMiFv6zBlizpJZ6mmhjA"
+  },
+  {
+    "id": "fd4",
+    "en": "Porridge",
+    "am": "ጫት",
+    "category": "food",
+    "video": "signs/fd4.mp4",
+    "driveId": "1bV_c4WwnacLBn0w0omvFhi-HYNan1yWw"
+  },
+  {
+    "id": "fd5",
+    "en": "Ambasha",
+    "am": "አምባሻ",
+    "category": "food",
+    "video": "signs/fd5.mp4",
+    "driveId": "13tAh5P8C9FwVFhZHruBG0tZOVIbiaLdx"
+  },
+  {
+    "id": "fd6",
+    "en": "Shiro",
+    "am": "ሽሮ",
+    "category": "food",
+    "video": "signs/fd6.mp4",
+    "driveId": "1vpyCRYUY1D5SK4kamPwNM6wOiCnzVHbY"
+  },
+  {
+    "id": "fd7",
+    "en": "Tibs",
+    "am": "ጥብስ",
+    "category": "food",
+    "video": "signs/fd7.mp4",
+    "driveId": "1wm2QCNCbpgB09FeOhwYikciJlNGDpCvc"
+  },
+  {
+    "id": "fd8",
+    "en": "Raw Meat",
+    "am": "ጥሬ ስጋ",
+    "category": "food",
+    "video": "signs/fd8.mp4",
+    "driveId": "1Wc5Gk2LodLGZpU-C9RA6UoPyB5TgCHkj"
+  },
+  {
+    "id": "fd9",
+    "en": "Salad",
+    "am": "ሰላጣ",
+    "category": "food",
+    "video": "signs/fd9.mp4",
+    "driveId": "1xTiPSYHq1FMdE41DCVPO2HQZ2S1EzwTw"
+  },
+  {
+    "id": "fd10",
+    "en": "Cabbage",
+    "am": "ጎመን",
+    "category": "food",
+    "video": "signs/fd10.mp4",
+    "driveId": "18LuMN-2SF6BY7S-WDCdLH9ZqxVmlOkSY"
+  },
+  {
+    "id": "fd11",
+    "en": "Quanta",
+    "am": "ቃንጣ",
+    "category": "food",
+    "video": "signs/fd11.mp4",
+    "driveId": "1g13u4iJ71x22aXVH38QPCXsZ3a49kJMy"
+  },
+  {
+    "id": "fd12",
+    "en": "Egg",
+    "am": "እንቁላል",
+    "category": "food",
+    "video": "signs/fd12.mp4",
+    "driveId": "18D6XxilQ0prjGHoRaLNOYKg8tX-17tkh"
+  },
+  {
+    "id": "fd13",
+    "en": "Fruit",
+    "am": "ፍራፍሬ",
+    "category": "food",
+    "video": "signs/fd13.mp4",
+    "driveId": "19xpGU3O7g4JHa1vD_mxIK0_jckzyL-Ye"
+  },
+  {
+    "id": "fd14",
+    "en": "Meat",
+    "am": "ስጋ",
+    "category": "food",
+    "video": "signs/fd14.mp4",
+    "driveId": "1Cr4Qx4AMUAk7iTXEpCNZrA21pnL4mFa_"
+  },
+  {
+    "id": "fd15",
+    "en": "Honey",
+    "am": "ማር",
+    "category": "food",
+    "video": "signs/fd15.mp4",
+    "driveId": "1N7_o_yTp8DPZ-WvPCoHOPRWNSD7EhX3x"
+  },
+  {
+    "id": "fd16",
+    "en": "Tea",
+    "am": "ሻይ",
+    "category": "food",
+    "video": "signs/fd16.mp4",
+    "driveId": "1Ch2pLmyMSdPH0w4AllfAabeJhL0nrw27"
+  },
+  {
+    "id": "fd17",
+    "en": "Coffee",
+    "am": "ቡና",
+    "category": "food",
+    "video": "signs/fd17.mp4",
+    "driveId": "1BARTcT_VKTd9X-oByjiTWpvmDgpwl7Eo"
+  },
+  {
+    "id": "fd18",
+    "en": "Soda",
+    "am": "ሶዳ",
+    "category": "food",
+    "video": "signs/fd18.mp4",
+    "driveId": "1l3I4A-viML5V_R62iauN-3_bDA4t8KKE"
+  },
+  {
+    "id": "fd19",
+    "en": "Juice",
+    "am": "ጁስ",
+    "category": "food",
+    "video": "signs/fd19.mp4",
+    "driveId": "1L80RXEPfUCFB7Z5Kt6BckxK2RGPnS6I5"
+  },
+  {
+    "id": "fd20",
+    "en": "Atmit",
+    "am": "አትሚት",
+    "category": "food",
+    "video": "signs/fd20.mp4",
+    "driveId": "1Ot7j7821TxXgbxjiznEVZlSmXwlvDBS7"
+  },
+  {
+    "id": "fd21",
+    "en": "Milk",
+    "am": "ወተት",
+    "category": "food",
+    "video": "signs/fd21.mp4",
+    "driveId": "1RCuwqmfz229zQOi8WmRoEbKnulSdLxWI"
+  },
+  {
+    "id": "s1",
+    "en": "Pay",
+    "am": "ክፈል",
+    "category": "shopping",
+    "video": "signs/s1.mp4",
+    "driveId": "128CthES6X6h550XPLBSfAi3WbV8zu_gr"
+  },
+  {
+    "id": "s2",
+    "en": "Receipt",
+    "am": "ደረሰኝ",
+    "category": "shopping",
+    "video": "signs/s2.mp4",
+    "driveId": "11-HLTYGl__zM8M3AoTGQ3ZeFDagqCBH6"
+  },
+  {
+    "id": "s3",
+    "en": "Money",
+    "am": "ገንዘብ",
+    "category": "shopping",
+    "video": "signs/s3.mp4",
+    "driveId": "1q9ftGtxQiCYxWMnEO35co7NGKl1-kBRS"
+  },
+  {
+    "id": "s4",
+    "en": "Exchange/To change money",
+    "am": "ገንዘብ መቀየር",
+    "category": "shopping",
+    "video": "signs/s4.mp4",
+    "driveId": "1gcDUO_7FWlyRipjL1fddcx5Wy0xxD81g"
+  },
+  {
+    "id": "s5",
+    "en": "Buy",
+    "am": "ግዛ",
+    "category": "shopping",
+    "video": "signs/s5.mp4",
+    "driveId": "1f7TV5wrs8vY_O_QHYQaMUmW2fWucMheC"
+  },
+  {
+    "id": "s6",
+    "en": "Sale",
+    "am": "ቅናሽ",
+    "category": "shopping",
+    "video": "signs/s6.mp4",
+    "driveId": "1MGJM8vbzwTTWbPMxYziOiMuA1XDd94aq"
+  },
+  {
+    "id": "s7",
+    "en": "Expensive",
+    "am": "ውድ",
+    "category": "shopping",
+    "video": "signs/s7.mp4",
+    "driveId": "18I8-OQEbciCV_zXLvuAeaEdpVoqtqvEC"
+  },
+  {
+    "id": "s8",
+    "en": "Cheap",
+    "am": "ርካሽ",
+    "category": "shopping",
+    "video": "signs/s8.mp4",
+    "driveId": "1YuJKk73DG6aICG8DAlxcor3bqien8GQk"
+  },
+  {
+    "id": "s9",
+    "en": "Comfortable",
+    "am": "ምቹ",
+    "category": "shopping",
+    "video": "signs/s9.mp4",
+    "driveId": "1lJEC2yJxIV561yuXaSm7nj61ENuTUVJw"
+  },
+  {
+    "id": "s10",
+    "en": "Fashion",
+    "am": "ፋሽን",
+    "category": "shopping",
+    "video": "signs/s10.mp4",
+    "driveId": "1Qd4AX9huipvUKY-FE8qgKbne-PpeQpGT"
+  },
+  {
+    "id": "s11",
+    "en": "Small",
+    "am": "ትንሽ",
+    "category": "shopping",
+    "video": "signs/s11.mp4",
+    "driveId": "1PHd9GOpJVg3nxqNBh9bbBd9HC4zwYdcg"
+  },
+  {
+    "id": "s12",
+    "en": "Large",
+    "am": "ትልቅ",
+    "category": "shopping",
+    "video": "signs/s12.mp4",
+    "driveId": "1O5GEieS2gFQItebxsbEVpJWFIcCVyLXU"
+  },
+  {
+    "id": "s13",
+    "en": "Medium",
+    "am": "መካከለኛ",
+    "category": "shopping",
+    "video": "signs/s13.mp4",
+    "driveId": "1apP179BOaIae59l41OjoE1J8F3Z2J9-L"
+  },
+  {
+    "id": "s14",
+    "en": "How much",
+    "am": "በስንት ነው",
+    "category": "shopping",
+    "video": "signs/s14.mp4",
+    "driveId": "1Q-BKnzSPDS3Rjr6ReE8T6PeEpfJbgysY"
+  },
+  {
+    "id": "e1",
+    "en": "Health",
+    "am": "ጤና",
+    "category": "emergency",
+    "video": "signs/e1.mp4",
+    "driveId": "17Q_MRRuLzdh6n9YFuPGD9eWuaImPnCXP"
+  },
+  {
+    "id": "e2",
+    "en": "Sick",
+    "am": "ታመመ",
+    "category": "emergency",
+    "video": "signs/e2.mp4",
+    "driveId": "1YD9Tdsr1RQuE5NkJThM80UlR4sxgP3oK"
+  },
+  {
+    "id": "e3",
+    "en": "Fever",
+    "am": "ትኩሳት",
+    "category": "emergency",
+    "video": "signs/e3.mp4",
+    "driveId": "1lml__3ND44t5oxe0CefNH_K5PpUT3cK8"
+  },
+  {
+    "id": "e4",
+    "en": "Stomachache",
+    "am": "ሆዱ ይታለማል",
+    "category": "emergency",
+    "video": "signs/e4.mp4",
+    "driveId": "1M8grlgui_Mf10rofuhyrmr0Efbzg39YS"
+  },
+  {
+    "id": "e5",
+    "en": "Bone",
+    "am": "አጥንት",
+    "category": "emergency",
+    "video": "signs/e5.mp4",
+    "driveId": "1J3m-2NAvm37OdwOtTJ_WNJdjQSV2zs1u"
+  },
+  {
+    "id": "e6",
+    "en": "Broken",
+    "am": "የተሰበረ",
+    "category": "emergency",
+    "video": "signs/e6.mp4",
+    "driveId": "1UA6a5---pb2wJxfz59fyGIHbU1mvZ_LK"
+  },
+  {
+    "id": "e7",
+    "en": "Itch",
+    "am": "ሙቅ",
+    "category": "emergency",
+    "video": "signs/e7.mp4",
+    "driveId": "1dbM39getO6z6MDJMoGzpOQ_0_zaqGhFa"
+  },
+  {
+    "id": "e8",
+    "en": "Cough",
+    "am": "ሳል",
+    "category": "emergency",
+    "video": "signs/e8.mp4",
+    "driveId": "1wrwj1cVEq9sIwu38-PnDM9H1dHQBjuTw"
+  },
+  {
+    "id": "e9",
+    "en": "Dizzy",
+    "am": "머리 ያወዛል",
+    "category": "emergency",
+    "video": "signs/e9.mp4",
+    "driveId": "1dDrZai3A2_oZZPpLmRIOVKc_40f7vhDo"
+  },
+  {
+    "id": "e10",
+    "en": "Nurse",
+    "am": "ሙያዊ ታካሚ ተንከባካቢ",
+    "category": "emergency",
+    "video": "signs/e10.mp4",
+    "driveId": "1yN2kc1rX9tLY_ojDOXrpDnnSO8wlOCIs"
+  },
+  {
+    "id": "n1",
+    "en": "Zero",
+    "am": "ዜሮ",
+    "category": "numbers",
+    "video": "signs/n1.mp4",
+    "driveId": "1OgRQBAg355YRYvinQ765ZY2AhSc-K54w"
+  },
+  {
+    "id": "n2",
+    "en": "One",
+    "am": "አንድ",
+    "category": "numbers",
+    "video": "signs/n2.mp4",
+    "driveId": "1Tvc6HXWd8pg4x2WoqrDHDdEeI5roW7Yo"
+  },
+  {
+    "id": "n3",
+    "en": "Two",
+    "am": "ሁለት",
+    "category": "numbers",
+    "video": "signs/n3.mp4",
+    "driveId": "1FDPF6428X_nDyKXDIes9Og2vR4bpaciD"
+  },
+  {
+    "id": "n4",
+    "en": "Three",
+    "am": "ሶስት",
+    "category": "numbers",
+    "video": "signs/n4.mp4",
+    "driveId": "1rbEb0-7cyVJNkxE3fOxPNCTr5UjL5-f7"
+  },
+  {
+    "id": "n5",
+    "en": "Four",
+    "am": "አራት",
+    "category": "numbers",
+    "video": "signs/n5.mp4",
+    "driveId": "1tSuKZfW7wCNGVhGFqE-oChKO55_5al-f"
+  },
+  {
+    "id": "n6",
+    "en": "Five",
+    "am": "አምስት",
+    "category": "numbers",
+    "video": "signs/n6.mp4",
+    "driveId": "1t_uXZDQeECGVBUmow5pA_nDhoohwLcbx"
+  },
+  {
+    "id": "n7",
+    "en": "Six",
+    "am": "ስድስት",
+    "category": "numbers",
+    "video": "signs/n7.mp4",
+    "driveId": "1XMOUonx8f-QE1ZVrJY6yhNeqFk4Yyx4x"
+  },
+  {
+    "id": "n8",
+    "en": "Seven",
+    "am": "ሰባት",
+    "category": "numbers",
+    "video": "signs/n8.mp4",
+    "driveId": "1JZ_dcgb7u7zoMcvsgyxxqv88cUGZe3Xt"
+  },
+  {
+    "id": "n9",
+    "en": "Eight",
+    "am": "ስምንት",
+    "category": "numbers",
+    "video": "signs/n9.mp4",
+    "driveId": "1TWKk-VjAnx_4JVo6MRiXLhtCpU-iB6bd"
+  },
+  {
+    "id": "n10",
+    "en": "Nine",
+    "am": "ዘጠኝ",
+    "category": "numbers",
+    "video": "signs/n10.mp4",
+    "driveId": "1NxWDh-0kNbqANmDHhMcWn1Nm2QgMgXLr"
+  },
+  {
+    "id": "n11",
+    "en": "Ten",
+    "am": "አስር",
+    "category": "numbers",
+    "video": "signs/n11.mp4",
+    "driveId": "1WKdjbukkQKG7Lv_x6P-4HoqR9J-zdmW-"
+  }
+]
