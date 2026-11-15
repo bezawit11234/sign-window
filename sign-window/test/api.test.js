@@ -66,6 +66,22 @@ test('signs, transcript, and offline pack', async function (t) {
   const escaped = await request(port, { path: '/api/offline-pack?lesson=../secrets' })
   assert.equal(escaped.status, 400)
 
+  const page = await request(port, { path: '/api/transcript' })
+  assert.equal(page.status, 200)
+  const transcriptPage = page.body.toString('utf8')
+  assert.match(transcriptPage, /<table>/)
+  assert.match(transcriptPage, /lang="am"/)
+  assert.match(transcriptPage, /Print or save as PDF/)
+  assert.match(transcriptPage, /This transcript has no images/)
+  assert.equal(transcriptPage.includes('tagged PDF file'), false)
+
+  const badge = await request(port, { path: '/api/certificates/ETH-2026-001.jsonld' })
+  assert.equal(badge.status, 200)
+  const credential = JSON.parse(badge.body.toString('utf8'))
+  assert.equal(credential['@type'], 'EducationalOccupationalCredential')
+  assert.equal(credential.identifier, 'ETH-2026-001')
+  assert.match(credential.description, /not a signed Open Badges/)
+
   const certificate = await request(port, { path: '/api/certificates/ETH-2026-001' })
   assert.equal(certificate.status, 200)
   const record = JSON.parse(certificate.body.toString('utf8'))

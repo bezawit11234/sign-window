@@ -1,5 +1,5 @@
 /* Caches the player, fonts, and the demo lesson after the first visit. */
-const CACHE = 'sign-window-v7'
+const CACHE = 'sign-window-v8'
 const PRECACHE = [
   '/',
   '/demo/index.html',
@@ -11,6 +11,7 @@ const PRECACHE = [
   '/demo/verify.html',
   '/demo/verify.js',
   '/demo/transcript.html',
+  '/demo/print.js',
   '/demo/certificates.json',
   '/demo/signs.json',
   '/demo/timeline.json',
@@ -18,6 +19,15 @@ const PRECACHE = [
   '/demo/am.vtt',
   '/demo/ad.vtt',
   '/demo/lesson.mp4',
+  '/demo/signs/f1.mp4',
+  '/demo/signs/f2.mp4',
+  '/demo/signs/f3.mp4',
+  '/demo/signs/f4.mp4',
+  '/demo/signs/f5.mp4',
+  '/demo/signs/f6.mp4',
+  '/demo/signs/f12.mp4',
+  '/demo/signs/f15.mp4',
+  '/demo/signs/f17.mp4',
   '/player/signwindow.js',
   '/player/signwindow.css',
   '/player/media.js',

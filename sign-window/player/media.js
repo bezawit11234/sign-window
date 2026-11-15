@@ -115,19 +115,74 @@
     'li{margin:8px 0}'
   ].join('')
 
+  function ethiopianDate(iso) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || '').trim())
+    if (!match) return null
+    const date = new Date(iso + 'T12:00:00Z')
+    let am = ''
+    let en = ''
+    try {
+      am = new Intl.DateTimeFormat('am-ET-u-ca-ethiopic', {
+        dateStyle: 'long',
+        timeZone: 'UTC'
+      }).format(date)
+    } catch (error) {
+      am = ''
+    }
+    try {
+      en = new Intl.DateTimeFormat('en-GB-u-ca-ethiopic', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC'
+      }).format(date)
+    } catch (error) {
+      en = ''
+    }
+    return { am: am, en: en }
+  }
+
+  function alignAmharic(cues, amCues) {
+    const extra = Array.isArray(amCues) ? amCues.slice() : []
+    return (Array.isArray(cues) ? cues : []).map(function (cue) {
+      const index = extra.findIndex(function (item) {
+        return Math.abs(item.start - cue.start) < 0.05
+      })
+      const match = index >= 0 ? extra.splice(index, 1)[0] : null
+      return { start: cue.start, en: cue.text || '', am: match ? match.text : '' }
+    })
+  }
+
   function transcriptDocument(options) {
     const opts = options || {}
     const lang = /^[a-z]{2}$/.test(opts.lang) ? opts.lang : 'en'
     const title = opts.title ? String(opts.title) : 'Lesson transcript'
     const cues = Array.isArray(opts.cues) ? opts.cues : []
-    const items = cues.map(function (cue) {
-      const safe = escapeHtml(cue.text).replace(/\n/g, '<br>')
-      return '<li><span>' + escapeHtml(formatClock(cue.start)) + '</span> <span lang="' + lang + '">' + safe + '</span></li>'
-    }).join('')
-    const body = items || '<li><span lang="' + lang + '">No captions were found in this file.</span></li>'
+    const bilingual = Array.isArray(opts.amCues)
+    let body
+    if (bilingual) {
+      const rows = alignAmharic(cues, opts.amCues)
+      const cells = rows.map(function (row) {
+        const amCell = row.am
+          ? '<td lang="am">' + escapeHtml(row.am).replace(/\n/g, '<br>') + '</td>'
+          : '<td></td>'
+        return '<tr><th scope="row">' + escapeHtml(formatClock(row.start)) + '</th><td lang="en">' + escapeHtml(row.en).replace(/\n/g, '<br>') + '</td>' + amCell + '</tr>'
+      }).join('')
+      body = '<table><caption>Caption cues for this lesson</caption><thead><tr><th scope="col">Time</th><th scope="col" lang="en">English</th><th scope="col" lang="am">Amharic</th></tr></thead><tbody>' + (cells || '<tr><td colspan="3">No captions were found in this file.</td></tr>') + '</tbody></table>'
+    } else {
+      const items = cues.map(function (cue) {
+        const safe = escapeHtml(cue.text).replace(/\n/g, '<br>')
+        return '<li><span>' + escapeHtml(formatClock(cue.start)) + '</span> <span lang="' + lang + '">' + safe + '</span></li>'
+      }).join('')
+      body = '<ol>' + (items || '<li><span lang="' + lang + '">No captions were found in this file.</span></li>') + '</ol>'
+    }
     const style = opts.inlineCss
       ? '<style>' + STANDALONE_CSS + '</style>'
       : '<link rel="stylesheet" href="' + escapeHtml(opts.styleHref || '/demo/site.css') + '">'
+    const print = opts.inlineCss
+      ? '<p>To save a PDF, use the browser print command and choose Save as PDF. This page is not a tagged PDF file.</p>'
+      : '<p class="no-print"><button type="button" id="print-transcript">Print or save as PDF</button></p>'
+    const printScript = opts.inlineCss ? '' : '<script src="/demo/print.js"></script>'
     return [
       '<!DOCTYPE html>',
       '<html lang="' + lang + '">',
@@ -142,8 +197,11 @@
       '<main id="main">',
       '<h1>' + escapeHtml(title) + '</h1>',
       '<p>Text transcript. You can read this without playing the video.</p>',
-      '<ol>' + body + '</ol>',
+      '<p>This transcript has no images.</p>',
+      print,
+      body,
       '</main>',
+      printScript,
       '</body>',
       '</html>'
     ].join('')
@@ -155,6 +213,7 @@
     activeAt: activeAt,
     escapeHtml: escapeHtml,
     formatClock: formatClock,
+    ethiopianDate: ethiopianDate,
     transcriptDocument: transcriptDocument
   }
 })

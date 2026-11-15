@@ -1,6 +1,38 @@
 # Sign Window
 
-Sign Window is an embeddable lesson player for Ethiopian Sign Language. A training site adds one script tag and gets a captioned video, a movable sign window, and a text transcript. It is a plugin, not a replacement for the MiliketApp.
+Sign Window is an embeddable lesson player for Ethiopian Sign Language. A host page adds one script tag. The player is vanilla JavaScript and CSS. It does not use a CDN, a tracking script, or a runtime framework.
+
+The demo lesson is Family signs, filmed with Deaf youth at Yekatit 23 School in Bahir Dar. `demo/lesson.mp4` is that film (about 1 minute 39 seconds, 640×360). It is not a placeholder.
+
+## Install in 1 hour
+
+You need Node.js 20 or newer.
+
+```bash
+cd sign-window
+npm install
+npm start
+```
+
+Open http://localhost:3000/demo/index.html .
+
+If `demo/signs/f1.mp4` is missing, the sign window still shows the English and Amharic names and the words "Clip not available offline". To fetch the nine clips this lesson uses:
+
+```bash
+node scripts/download-videos.js f1 f5 f2 f6 f3 f4 f12 f15 f17
+```
+
+Then compress them to 240 pixels tall. From Git Bash or another shell that has `sh`:
+
+```bash
+sh scripts/compress-videos.sh
+```
+
+On this Windows machine `sh` was not on the PATH. The same ffmpeg command from that script was run directly: `scale=-2:240`, `libx264`, `crf 30`, `aac` at 64k, `+faststart`. After that, `ffprobe` reported `demo/signs/f1.mp4` as 426×240.
+
+`npm test` and `npm run a11y` are below. `npm start` only needs the dependencies in `dependencies` (`express` and `archiver`). Playwright and the font package are dev dependencies.
+
+## Embed
 
 ```html
 <script src="/player/signwindow.js"></script>
@@ -15,27 +47,9 @@ Sign Window is an embeddable lesson player for Ethiopian Sign Language. A traini
 
 Paths are resolved from the page that contains the tag. On this demo they live in `demo/`.
 
-## Quick start
+Add `sign-fallback="lesson"` only if a missing dictionary clip should copy the lesson video into the sign window. The default is not to do that. A missing clip shows the English name, the Amharic name, and "Clip not available offline".
 
-You need Node.js 20 or newer.
-
-```bash
-cd sign-window
-npm install
-npm start
-```
-
-Open http://localhost:3000 . The lesson is at http://localhost:3000/demo/index.html .
-
-With Docker, from this folder:
-
-```bash
-docker compose up --build
-```
-
-That serves the same site on port 3000. Docker Desktop was installed here but the engine was not running, so this command was not executed in this session.
-
-## Player attributes
+### Attributes
 
 | Attribute | Required | Meaning |
 | --- | --- | --- |
@@ -45,8 +59,25 @@ That serves the same site on port 3000. Docker Desktop was installed here but th
 | `descriptions` | no | Audio-description WebVTT. A cue may include a line `AUDIO:file.mp3` |
 | `timeline` | no | JSON cues `{ "start", "end", "signId" }` in seconds |
 | `signs` | no | JSON dictionary. `video` paths are relative to this file |
+| `sign-fallback` | no | Set to `lesson` to replay the lesson video when a clip file is missing. Any other value, including omitting it, shows the names and "Clip not available offline" |
 
-`GET /api/offline-pack` is the "Download for offline" link. It zips a transcript, the caption files, and `demo/audio-description.mp3` if that file exists.
+## How the player behaves
+
+- On a screen at least 640 CSS pixels wide, the sign window floats on the lesson, starts at size Small in the top-right, and can be dragged. Open **Sign window** for Move, Min, S, M, and L, and Reset. Arrow keys move it when Move is focused. Shift plus an arrow moves 50 pixels.
+- Below 640 CSS pixels the sign window sits under the lesson as a thumbnail. It does not cover the picture, the captions, or the control bar. Keyboard move does not pull it back on top of the video.
+- Captions default to a semi-transparent background (80% strength). The settings slider can go from 55% to 100%. There are five text sizes and three colour themes: white on black, yellow on black, and black on white.
+- The visible line in the sign window is "Key sign from the MiliketApp dictionary".
+- Keyboard shortcuts are in one disclosure under the player, titled "Keyboard shortcuts".
+
+## Try it in the Savanna starter
+
+The Savanna starter was not in this folder. When your mentor sends it:
+
+1. Copy `player/` onto a path the starter already serves as static files.
+2. Put the lesson media next to the page, or point the attributes at URLs the starter can load from this same origin. The player does not load third-party scripts.
+3. Add the embed above to a lesson page in the starter.
+4. Leave `sign-fallback` off unless you specifically want the lesson film copied into the sign window.
+5. Open that page, play the lesson, switch captions, and move the sign window with the keyboard.
 
 ## Keyboard
 
@@ -57,70 +88,82 @@ Shortcuts run only while focus is inside the player.
 | Space or K | Play or pause |
 | Left / Right | Seek 5 seconds |
 | M | Mute |
-| C | Cycle captions: English, Amharic, off |
+| C | Cycle captions: both, English, Amharic, off |
 | F | Full screen |
-| Escape | Close settings |
-| Arrow keys on Move | Move the sign window 10px (Shift: 50px) |
-| Arrow keys on Resize | Resize the sign window |
+| Escape | Close settings, or close the sign-window tools when focus is inside them |
+| Arrow keys on Move | Move the sign window 10px (Shift: 50px) on a wide screen |
 
-Back 10 seconds and Forward 10 seconds are buttons. Small, Medium, Large, and Reset position do not need a pointer.
+Back 10 seconds and Forward 10 seconds are buttons. S, M, L, and Reset are buttons inside **Sign window**.
 
 ## API
 
 Details are in `docs/openapi.yaml`.
 
 - `GET /api/signs` returns the dictionary.
+- `GET /api/transcript` returns the Family signs transcript as HTML, with English and Amharic in a table. Amharic cells are empty when `demo/am.vtt` has no cue at that time.
 - `POST /api/transcript` accepts WebVTT (`text/vtt`, `text/plain`, or JSON `{ "vtt" }`, max 512 KB) and returns an HTML transcript. `?lang=en` or `?lang=am`. `?title=` is optional and limited to 120 characters.
-- `GET /api/offline-pack?lesson=greetings-numbers` returns a zip. Any other lesson id is rejected.
+- `GET /api/offline-pack?lesson=family-signs` returns a zip. `greetings-numbers` is still accepted as an alias for the same files. Any other lesson id is rejected.
+- `GET /api/certificates/:id` returns the demo certificate JSON.
+- `GET /api/certificates/:id.jsonld` returns schema.org `EducationalOccupationalCredential` JSON-LD for that demo record. It is not a signed Open Badges 3.0 credential.
 
-The server does not call other websites and does not log request bodies or query strings.
+There is no `/api/transcript.pdf`. Use **Print or save as PDF** on the transcript page. The browser's print dialog can save a PDF. This project does not generate a tagged PDF file.
 
-## Accessibility
+The server does not call other websites and does not log request bodies or query strings. Certificate paths are logged as `/api/certificates/:id`.
 
-- Real buttons, links, and inputs in the page, not a canvas.
-- Captions are drawn by the player. The WebVTT tracks stay on the video in hidden mode.
-- Caption size has five steps. Colours are white on black, yellow on black, or black on white. Background strength stops at 55% so the text stays on a dark player surface.
-- Settings are stored in `localStorage` inside try/catch.
-- Amharic text uses `lang="am"` and the local Noto Sans Ethiopic files.
-- The sign window can be dragged or moved with the keyboard.
-- "Announce signs" is off by default.
-- "Audio description" puts each description in a polite live region and plays a cue audio file when one is listed.
-- A service worker caches the player, fonts, and demo lesson after the first visit.
-- `prefers-reduced-motion` turns off animation.
+## Ethiopian calendar
 
-## How this was tested
+The job deadline 30 November 2026 and the certificate dates are also formatted with `Intl.DateTimeFormat` and the `ethiopic` calendar (`am-ET` for Amharic, `en-GB` for the English fallback). On this machine, 30 November 2026 formatted as `21 ኅዳር 2019 AM` and `21 Hedar 2019 AM`.
 
-On 14 November 2026, in Chrome, from this folder:
+## Docker
 
-- `npm test` — 9 passed (VTT parser, transcript escaping, timeline boundaries, and the three API routes).
-- `npm run a11y` — 4 passed. axe-core reported no critical or serious violations on `/demo/index.html`, `/demo/job.html`, and `/demo/verify.html?id=ETH-2026-001`. A second test tabbed through the player and reached a control outside it. Focused player controls had a visible outline. The K key did not start the video while focus was on a link outside the player. ArrowDown moved the sign window.
-- A 320px-wide viewport on the lesson, job card, certificate page, and transcript did not create a horizontal scrollbar.
-- Setting the lesson video to 1 second showed the caption `Hello.` The sign window showed the English and Amharic names for that cue.
-- `ETH-2026-001` showed: Valid. Hana Bekele earned it on 1 November 2026.
+`Dockerfile` has a `HEALTHCHECK` that requests `/demo/index.html`. `docker-compose.yml` sets `restart: unless-stopped`. `.dockerignore` excludes `*.md`, tests, and `node_modules`. It does not exclude `server/`, `player/`, or `demo/`.
 
-Not done: NVDA, TalkBack, browser zoom at 200% or 400%, a Deaf co-designer session, or a fluent Amharic review. See `docs/conformance-report.md`.
+Docker client 29.8.2 is installed on this machine. The engine was not running (`dockerDesktopLinuxEngine` pipe missing), so `docker compose up --build` was **not** run here. Do not treat Docker as tested until you run it.
+
+```bash
+docker compose up --build
+```
+
+## Tests run on 15 November 2026
+
+From `sign-window/`, in installed Google Chrome (Playwright channel `chrome`):
+
+- `npm test` — 13 passed, 0 failed. That covers the VTT parser, the lesson VTT files (dotted milliseconds, no overlapping cues), transcript escaping, timeline boundaries, the Ethiopian calendar conversion, and the API routes including `GET /api/transcript` and the schema.org credential.
+- `npm run a11y` — 12 passed, 0 failed. axe-core reported no critical or serious violations on the lesson, job card, and certificate page. Further checks, all in this same run:
+  - lesson layout at 320, 375, 640, and 1280 CSS pixels, with screenshots under `test-results/` (that folder is gitignored)
+  - at 320 and 375 the sign window's box starts at or below the lesson video and does not intersect the control bar
+  - job, certificate, and transcript pages at 320 pixels have no horizontal overflow
+  - Gold page theme with yellow-on-black captions at the largest caption size, then Dark page theme with white-on-black captions, both with no serious axe violations
+  - WCAG 1.4.12 spacing (`demo/text-spacing.css`) on the lesson at 375 pixels, no horizontal overflow, axe still clean
+  - `documentElement` zoom 2 at a 640 pixel viewport, no horizontal overflow
+  - visible links, buttons, inputs, selects, and the keyboard-shortcuts summary on the lesson at 375 pixels are at least 24px in both directions
+  - Move plus ArrowDown, then Shift+ArrowDown (50 pixels), S, M, L, Reset, and Min
+  - Tab enters the player and later leaves it
+  - a blocked dictionary clip does not copy the lesson into the sign window
 
 ## Honest limitations
 
-- Sign clips are the MiliketApp dictionary: one sign at a time, not a translation of a full sentence.
-- Those clips are Google Drive files. A download attempt timed out. Until you run the download script, the window shows the English and Amharic names and says the clip is not on the device.
-- `demo/lesson.mp4` is a 48-second placeholder with the word PLACEHOLDER and a tone. Replace it.
-- Amharic captions are the dictionary headwords copied from the app. They are marked as a draft. The app's "Dizzy" string is stored as `머리 ያወዛል` (Hangul plus Ethiopic). It was copied unchanged and needs a human correction.
+- Dictionary clips are one sign at a time. They are not a translation of a full sentence.
+- The nine Family signs clips used by `demo/timeline.json` were downloaded from the Drive ids in `demo/signs.json` and compressed to 240p in this session. Other dictionary ids are still not on disk. `.gitignore` no longer ignores `demo/signs/*.mp4`, so those nine files can be committed. Confirm you have permission before publishing the sign videos or `demo/lesson.mp4`.
+- Amharic captions are a draft. They copy the `am` field from `demo/signs.json` and nothing else. A fluent speaker has not reviewed them. The list is `docs/amharic-review.md`.
 - Amharic speech uses the device voice, if the device has one. This project does not ship a speech engine.
-- The demo is one lesson: greetings and numbers.
-- The job card plays `demo/job-summary.mp3` only when that file is present. The same summary is always on the page as text.
-- Offline cache covers this demo's files, not every lesson a host might add later.
+- The offline service worker caches the player, fonts, the lesson film, and the nine sign clips above. It does not cache every file a host might add later.
+- No NVDA, TalkBack, or Deaf co-designer session has been run. Do not write that those passed.
+- Browser zoom at 200% and 400% in a normal browser window, used by a person, was not done. The Playwright zoom check above is not that test.
+- The print flow is HTML plus the browser print dialog. It is not a tagged PDF.
+- The certificate JSON-LD is demo data. It is not a signed Open Badges credential.
+- `scripts/generate-signs.js` still expects the old Flutter `app_data.dart` file. Do not run it. `demo/signs.json` is already generated. The Dizzy entry (`e9`) still has the stored string `머리 ያወዛል`. It was not corrected.
 
 ## Credits
 
-- Sign names and Drive ids: MiliketApp `lib/data/app_data.dart`. Confirm you have permission before publishing the videos.
-- Noto Sans Ethiopic: Google Fonts, SIL Open Font License. See `player/fonts/LICENSE`.
+- Sign names and Drive ids came from the MiliketApp data that was used to build `demo/signs.json`. Confirm permission before you share the videos.
+- Noto Sans Ethiopic: SIL Open Font License. See `player/fonts/LICENSE`.
 - Server: Node.js, Express, archiver.
 - Tests: Node's test runner, Playwright, axe-core.
 
 ## Co-design
 
-TODO (you must fill this in before the panel scores the module):
+TODO. A person must fill this in before the panel scores the module:
 
 - [ ] Deaf co-designer name and how they want to be credited
 - [ ] Date and place of the unaided session
@@ -129,4 +172,4 @@ TODO (you must fill this in before the panel scores the module):
 - [ ] What blocked them
 - [ ] What you changed afterwards
 
-Write the session up in `docs/cocreation-notes.md`. Use `docs/test-log.md` for NVDA, TalkBack, and zoom notes.
+Write the session in `docs/cocreation-notes.md`. Use `docs/test-log.md` for NVDA, TalkBack, and zoom notes. The steps for the session are in `docs/final-test-script.md`.

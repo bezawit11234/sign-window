@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node server/index.js",
-    "test": "node --test test/vtt.test.js test/transcript.test.js test/timeline.test.js test/api.test.js",
+    "test": "node --test test/vtt.test.js test/transcript.test.js test/timeline.test.js test/calendar.test.js test/api.test.js",
     "a11y": "playwright test",
     "copy-fonts": "node scripts/copy-fonts.js",
     "generate-signs": "node scripts/generate-signs.js",

@@ -1,9 +1,6 @@
 WEBVTT
 
-NOTE DRAFT. Amharic lines are the MiliketApp dictionary names for the same English word. Uncle's child and Aunt's child are not in that dictionary, so those moments stay in English until a fluent speaker writes them. Please review.
-
-00:00:04.000 --> 00:00:12.000
-ቤተሰብ
+NOTE DRAFT. Amharic lines are copied from the "am" field in demo/signs.json for the same English word. A fluent speaker must review them. Cues with no dictionary entry are omitted. See docs/amharic-review.md.
 
 00:00:12.000 --> 00:00:16.000
 እናት

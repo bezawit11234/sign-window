@@ -1,4 +1,14 @@
 (function () {
+  const calendar = window.SignWindowShared && window.SignWindowShared.ethiopianDate
+    ? window.SignWindowShared.ethiopianDate('2026-11-30')
+    : null
+  const am = document.getElementById('deadline-eth-am')
+  const en = document.getElementById('deadline-eth-en')
+  if (calendar && am && en) {
+    am.textContent = calendar.am || ''
+    en.textContent = calendar.en || 'Ethiopian date unavailable on this browser'
+  }
+
   const button = document.getElementById('play-summary')
   const status = document.getElementById('audio-status')
   const summary = document.getElementById('summary').textContent

@@ -19,11 +19,12 @@ demo/audio-description.mp3
   Optional. One recording of the descriptions. If you skip it, the player
   speaks ad.vtt with the phone's own voice.
 
-demo/signs/g1.mp4 and the other ids
+demo/signs/f1.mp4 and the other ids in demo/timeline.json
   One silent or quiet MP4 per dictionary sign. The file name is the id in
-  demo/signs.json, for example demo/signs/g1.mp4 for Hello.
-  The lesson uses g1, g3, g8, g11, n2, n3, n4, and g6.
-  Download them with: node scripts/download-videos.js g1 g3 g8 g11 n2 n3 n4 g6
+  demo/signs.json, for example demo/signs/f1.mp4 for Mother.
+  This lesson uses f1, f5, f2, f6, f3, f4, f12, f15, and f17.
+  Download them with: node scripts/download-videos.js f1 f5 f2 f6 f3 f4 f12 f15 f17
+  Then compress with: sh scripts/compress-videos.sh
 
 demo/job-summary.mp3
   Optional recording of the job summary. If you skip it, the job page

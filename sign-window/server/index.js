@@ -8,12 +8,15 @@ const rootDir = path.join(__dirname, '..')
 const playerDir = path.join(rootDir, 'player')
 const demoDir = path.join(rootDir, 'demo')
 
+const FAMILY_LESSON = {
+  title: 'Family signs',
+  files: ['en.vtt', 'am.vtt', 'ad.vtt', 'timeline.json', 'signs.json'],
+  audio: 'audio-description.mp3'
+}
+
 const LESSONS = {
-  'greetings-numbers': {
-    title: 'Greetings and numbers',
-    files: ['en.vtt', 'am.vtt', 'ad.vtt'],
-    audio: 'audio-description.mp3'
-  }
+  'family-signs': FAMILY_LESSON,
+  'greetings-numbers': FAMILY_LESSON
 }
 
 const app = express()
@@ -79,6 +82,24 @@ app.get('/api/signs', function (req, res) {
   res.sendFile(path.join(demoDir, 'signs.json'))
 })
 
+app.get('/api/transcript', function (req, res) {
+  let enCues
+  let amCues
+  try {
+    enCues = parseVtt(fs.readFileSync(path.join(demoDir, 'en.vtt'), 'utf8'))
+    amCues = parseVtt(fs.readFileSync(path.join(demoDir, 'am.vtt'), 'utf8'))
+  } catch (error) {
+    return res.status(500).json({ error: 'The transcript could not be built.' })
+  }
+  res.type('html').send(transcriptDocument({
+    title: 'Transcript: Family signs',
+    lang: 'en',
+    cues: enCues,
+    amCues: amCues,
+    styleHref: '/demo/site.css'
+  }))
+})
+
 app.post('/api/transcript', express.text({ type: '*/*', limit: '512kb' }), function (req, res) {
   let vtt = req.body
   const type = String(req.headers['content-type'] || '')
@@ -113,6 +134,38 @@ app.post('/api/transcript', express.text({ type: '*/*', limit: '512kb' }), funct
   }))
 })
 
+app.get('/api/certificates/:id.jsonld', function (req, res) {
+  const id = String(req.params.id || '')
+  if (!/^[A-Za-z0-9-]{1,64}$/.test(id)) {
+    return res.status(400).json({ error: 'Invalid certificate id.' })
+  }
+  let records
+  try {
+    records = JSON.parse(fs.readFileSync(path.join(demoDir, 'certificates.json'), 'utf8'))
+  } catch (error) {
+    return res.status(500).json({ error: 'The certificate file could not be read.' })
+  }
+  const record = records[id]
+  if (!record) return res.status(404).json({ error: 'No certificate was found for this ID.' })
+  res.json({
+    '@context': 'https://schema.org',
+    '@type': 'EducationalOccupationalCredential',
+    identifier: id,
+    name: record.course,
+    description: 'Demo credential only. This is not a signed Open Badges credential.',
+    credentialCategory: 'certificate',
+    dateCreated: record.date,
+    recognizedBy: {
+      '@type': 'Organization',
+      name: 'Miliket demo'
+    },
+    about: {
+      '@type': 'Person',
+      name: record.name
+    }
+  })
+})
+
 app.get('/api/certificates/:id', function (req, res) {
   const id = String(req.params.id || '')
   if (!/^[A-Za-z0-9-]{1,64}$/.test(id)) {
@@ -136,7 +189,7 @@ app.get('/api/certificates/:id', function (req, res) {
 })
 
 app.get('/api/offline-pack', function (req, res) {
-  const requested = req.query.lesson == null ? 'greetings-numbers' : String(req.query.lesson)
+  const requested = req.query.lesson == null ? 'family-signs' : String(req.query.lesson)
   if (!/^[a-z0-9-]{1,64}$/.test(requested) || !LESSONS[requested]) {
     return res.status(400).json({ error: 'Unknown lesson.' })
   }

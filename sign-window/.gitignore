@@ -3,6 +3,5 @@ test-results/
 playwright-report/
 blob-report/
 playwright/.cache/
-demo/signs/*.mp4
 *.log
 .DS_Store

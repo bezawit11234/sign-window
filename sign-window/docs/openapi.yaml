@@ -83,8 +83,8 @@ paths:
           name: lesson
           schema:
             type: string
-            default: greetings-numbers
-          description: Only greetings-numbers is available. Other ids are rejected.
+            default: family-signs
+          description: family-signs is the lesson. greetings-numbers is accepted as an alias for the same files. Other ids are rejected.
       responses:
         '200':
           description: Zip file

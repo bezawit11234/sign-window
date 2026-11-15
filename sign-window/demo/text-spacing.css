@@ -1,0 +1,10 @@
+/* WCAG 1.4.12 text-spacing override used by the automated check. Not linked by the pages. */
+* {
+  line-height: 1.5 !important;
+  letter-spacing: 0.12em !important;
+  word-spacing: 0.16em !important;
+}
+
+p {
+  margin-bottom: 2em !important;
+}

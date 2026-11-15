@@ -37,7 +37,24 @@
   }).then(function (record) {
     if (!record) return
     const state = record.valid ? 'Valid' : 'Not valid'
-    show(state + '. ' + record.name + ' earned it on ' + formatDate(record.date) + '. Course: ' + record.course + '.')
+    const calendar = window.SignWindowShared && window.SignWindowShared.ethiopianDate
+      ? window.SignWindowShared.ethiopianDate(record.date)
+      : null
+    result.replaceChildren()
+    const paragraph = document.createElement('p')
+    paragraph.appendChild(document.createTextNode(state + '. ' + record.name + ' earned it on ' + formatDate(record.date) + '. '))
+    if (calendar && calendar.am) {
+      paragraph.appendChild(document.createTextNode('Ethiopian calendar: '))
+      const am = document.createElement('span')
+      am.lang = 'am'
+      am.textContent = calendar.am
+      paragraph.appendChild(am)
+      paragraph.appendChild(document.createTextNode(calendar.en ? ' (' + calendar.en + '). ' : '. '))
+    }
+    paragraph.appendChild(document.createTextNode('Course: ' + record.course + '.'))
+    result.appendChild(paragraph)
+    const badge = document.getElementById('badge-link')
+    if (badge) badge.href = '/api/certificates/' + encodeURIComponent(id) + '.jsonld'
   }).catch(function () {
     show('The certificate could not be checked.')
   })

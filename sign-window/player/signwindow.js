@@ -73,13 +73,6 @@
     }
   }
 
-  function composite(themeRgb, opacity) {
-    const base = [0, 0, 0]
-    return 'rgb(' + themeRgb.map(function (channel, index) {
-      return Math.round((opacity * channel) + ((1 - opacity) * base[index]))
-    }).join(',') + ')'
-  }
-
   let sequence = 0
 
   class SignWindow extends HTMLElement {
@@ -110,7 +103,7 @@
       this.captionLang = saved.captionLang || 'both'
       this.sizeIndex = Number.isInteger(saved.sizeIndex) ? saved.sizeIndex : 1
       this.theme = saved.theme || 'white-on-black'
-      this.opacity = Number.isFinite(saved.opacity) ? saved.opacity : 1
+      this.opacity = Number.isFinite(saved.opacity) ? saved.opacity : 0.8
       this.announceSigns = saved.announceSigns === true
       this.adOn = saved.adOn === true
       this.rate = saved.rate || 1
@@ -194,20 +187,30 @@
       transport.appendChild(volumeLabel)
       transport.appendChild(this.settingsBtn)
       transport.appendChild(this.fullscreenBtn)
-      this.controls.appendChild(transport)
       this.controls.appendChild(seekLabel)
+      this.controls.appendChild(transport)
 
       this.dock = el('div', { className: 'sw-dock' })
       this.sign = el('div', { className: 'sw-sign', role: 'region', 'aria-label': 'Sign language window' })
       const head = el('div', { className: 'sw-sign-head' })
       head.appendChild(el('p', { className: 'sw-sign-title' }, 'Sign language'))
-      this.minBtn = el('button', { type: 'button', 'aria-pressed': 'false', 'aria-label': 'Min, minimize sign language window' }, 'Min')
-      head.appendChild(this.minBtn)
-      const bar = el('div', { className: 'sw-sign-bar' })
+      this.signMenuBtn = el('button', {
+        type: 'button',
+        className: 'sw-sign-menu',
+        'aria-expanded': 'false',
+        'aria-controls': this.idBase + '-sign-tools'
+      }, 'Sign window')
+      head.appendChild(this.signMenuBtn)
+      const bar = el('div', { id: this.idBase + '-sign-tools', className: 'sw-sign-bar' })
+      bar.hidden = true
       this.signBar = bar
+      this.signToolsOpen = false
       this.moveBtn = el('button', { className: 'sw-move', type: 'button', 'aria-label': 'Move sign language window', 'aria-keyshortcuts': 'ArrowUp ArrowDown ArrowLeft ArrowRight' }, 'Move')
+      this.minBtn = el('button', { type: 'button', 'aria-pressed': 'false', 'aria-label': 'Min, minimize sign language window' }, 'Min')
       bar.appendChild(this.moveBtn)
+      bar.appendChild(this.minBtn)
       this.signVideo = el('video', { className: 'sw-sign-video', muted: '', playsinline: '', 'aria-hidden': 'true' })
+      this.sourceLabel = el('p', { className: 'sw-sign-source' }, 'Key sign from the MiliketApp dictionary')
       this.label = el('p', { className: 'sw-sign-label' })
       this.label.hidden = true
       this.labelEn = el('span', { lang: 'en' })
@@ -217,6 +220,7 @@
       this.label.appendChild(this.labelAm)
       this.empty = el('p', { className: 'sw-sign-empty' }, 'No key-term sign at this moment.')
       this.sign.appendChild(head)
+      this.sign.appendChild(this.sourceLabel)
       this.sign.appendChild(bar)
       this.sign.appendChild(this.signVideo)
       this.sign.appendChild(this.label)
@@ -244,7 +248,9 @@
 
       this.buildSettings()
       this.tools.appendChild(this.downloadLink)
-      this.help = el('p', { className: 'sw-help' }, 'When the player is focused: Space or K plays or pauses, Left and Right seek 5 seconds, M mutes, C changes captions, F is full screen. Arrow keys move the sign window when Move is focused. Shift plus an arrow key moves it further. Minimize hides the picture and keeps the name.')
+      this.help = el('details', { className: 'sw-keys' })
+      this.help.appendChild(el('summary', {}, 'Keyboard shortcuts'))
+      this.help.appendChild(el('p', {}, 'When the player is focused: Space or K plays or pauses, Left and Right seek 5 seconds, M mutes, C changes captions, F is full screen. Open Sign window, then focus Move. Arrow keys move the sign window. Shift plus an arrow key moves it 50 pixels. On a narrow screen the sign window stays below the video. Minimize hides the picture and keeps the name.'))
       root.appendChild(this.help)
       this.videoError = el('p', { className: 'sw-video-error' }, 'The lesson video could not be loaded.')
       this.videoError.hidden = true
@@ -380,6 +386,10 @@
       })
       this.settingsBtn.addEventListener('click', function () { player.toggleSettings() })
       this.fullscreenBtn.addEventListener('click', function () { player.toggleFullscreen() })
+      this.signMenuBtn.addEventListener('click', function () {
+        player.setSignTools(!player.signToolsOpen)
+        player.announce(player.signToolsOpen ? 'Sign window tools open' : 'Sign window tools closed')
+      })
       this.minBtn.addEventListener('click', function () {
         player.minimized = !player.minimized
         player.sign.classList.toggle('is-min', player.minimized)
@@ -470,6 +480,7 @@
       const player = this
       handle.addEventListener('pointerdown', function (event) {
         if (event.button !== 0) return
+        if (player.isNarrow()) return
         const pressed = event.target.closest('button, a, input, select')
         if (pressed && pressed !== player.moveBtn) return
         event.preventDefault()
@@ -683,6 +694,7 @@
       }
       this.signVideo.playbackRate = this.lesson.playbackRate || 1
       if (!id) return
+      if (this.signMode === 'missing' || !this.signVideo.src) return
       if (this.signMode === 'lesson' && this.signVideo.src) {
         const drift = Math.abs((this.signVideo.currentTime || 0) - (this.lesson.currentTime || 0))
         if (drift > 0.45 && this.signVideo.readyState >= 1) {
@@ -720,7 +732,8 @@
       check.then(function (exists) {
         if (player.activeSignId !== id) return
         if (exists) player.playSignSource(clip, 0, 'clip')
-        else player.playSignSource(player.lesson.currentSrc || player.lesson.src, player.lesson.currentTime || start || 0, 'lesson')
+        else if (player.lessonFallback()) player.playSignSource(player.lesson.currentSrc || player.lesson.src, player.lesson.currentTime || start || 0, 'lesson')
+        else player.showUnavailable(sign)
       })
       this.fitSign()
     }
@@ -752,9 +765,30 @@
       }
     }
 
+    lessonFallback() {
+      return this.getAttribute('sign-fallback') === 'lesson'
+    }
+
+    showUnavailable(sign) {
+      this.signMode = 'missing'
+      this.signVideo.pause()
+      this.signVideo.removeAttribute('src')
+      this.signVideo.load()
+      this.labelEn.textContent = (sign && sign.en) || ''
+      this.labelAm.textContent = (sign && sign.am) || ''
+      this.label.hidden = false
+      this.empty.hidden = false
+      this.empty.textContent = 'Clip not available offline'
+    }
+
     noteMissingClip() {
-      if (!this.activeSignId || this.signMode === 'lesson') return
-      this.playSignSource(this.lesson.currentSrc || this.lesson.src, this.lesson.currentTime || this.signStart || 0, 'lesson')
+      if (!this.activeSignId) return
+      const sign = this.signMap.get(this.activeSignId)
+      if (this.lessonFallback()) {
+        this.playSignSource(this.lesson.currentSrc || this.lesson.src, this.lesson.currentTime || this.signStart || 0, 'lesson')
+        return
+      }
+      this.showUnavailable(sign)
     }
 
     syncDescription() {
@@ -894,9 +928,10 @@
       }
       const theme = themes[this.theme] || themes['white-on-black']
       const size = SIZES[this.sizeIndex] || SIZES[1]
+      const strength = Math.min(1, Math.max(0.55, this.opacity))
       this.captionEn.style.color = theme.en
       this.captionAm.style.color = theme.am
-      this.captionBox.style.backgroundColor = composite(theme.rgb, this.opacity)
+      this.captionBox.style.backgroundColor = 'rgba(' + theme.rgb.join(',') + ',' + strength + ')'
       this.captionBox.style.fontSize = 'calc(' + size + 'px * var(--kit-scale, 1))'
     }
 
@@ -964,9 +999,19 @@
       this.announce('Sign window position reset')
     }
 
+    setSignTools(open) {
+      this.signToolsOpen = open === true
+      this.signBar.hidden = !this.signToolsOpen
+      this.signMenuBtn.setAttribute('aria-expanded', String(this.signToolsOpen))
+    }
+
+    isNarrow() {
+      return !!(this.layout && this.layout.clientWidth > 0 && this.layout.clientWidth < 640)
+    }
+
     applyDefaultPosition() {
       if (!this.layout) return
-      const preset = this.dockPreset || (this.layout.clientWidth < 480 ? 'small' : 'medium')
+      const preset = this.dockPreset || 'small'
       this.dockPreset = preset
       const cap = Math.max(140, this.layout.clientWidth - 24)
       this.signWidth = Math.min(PRESETS[preset] || PRESETS.medium, cap)
@@ -997,6 +1042,18 @@
 
     fitSign() {
       if (!this.layout) return
+      if (this.isNarrow()) {
+        this.layout.classList.add('is-narrow')
+        this.sign.classList.add('is-docked')
+        this.sign.style.height = ''
+        this.sign.style.left = 'auto'
+        this.sign.style.top = 'auto'
+        const width = Math.min(220, Math.max(140, this.layout.clientWidth - 16))
+        this.sign.style.width = width + 'px'
+        this.signVideo.style.height = this.minimized ? '0px' : Math.round(width * 9 / 16) + 'px'
+        return
+      }
+      this.layout.classList.remove('is-narrow')
       this.sign.classList.remove('is-docked')
       this.sign.style.height = ''
       const maxWidth = Math.max(140, this.layout.clientWidth - 16)
@@ -1011,6 +1068,11 @@
     }
 
     clampSign() {
+      if (this.isNarrow()) {
+        this.sign.style.left = 'auto'
+        this.sign.style.top = 'auto'
+        return
+      }
       const bounds = this.layout || this.stage
       const maxLeft = Math.max(0, bounds.clientWidth - this.sign.offsetWidth)
       const maxTop = Math.max(0, bounds.clientHeight - this.sign.offsetHeight)
@@ -1021,6 +1083,10 @@
     }
 
     moveSign(key, step) {
+      if (this.isNarrow()) {
+        this.announce('The sign window stays below the video on a narrow screen')
+        return
+      }
       this.userPlaced = true
       this.releaseDock()
       if (key === 'ArrowLeft') this.signLeft -= step
@@ -1050,6 +1116,13 @@
       if (target === this.moveBtn && key.indexOf('Arrow') === 0) {
         event.preventDefault()
         this.moveSign(key, event.shiftKey ? 50 : 10)
+        return
+      }
+      if (key === 'Escape' && this.signToolsOpen && this.signBar.contains(target)) {
+        event.preventDefault()
+        this.setSignTools(false)
+        this.signMenuBtn.focus()
+        this.announce('Sign window tools closed')
         return
       }
       if (key === 'Escape' && !this.settings.hidden) {
