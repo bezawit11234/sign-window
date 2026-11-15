@@ -27,15 +27,7 @@
     return
   }
 
-  fetch('/api/certificates/' + encodeURIComponent(id)).then(function (response) {
-    if (response.status === 404) {
-      show('No certificate was found for this ID.')
-      return null
-    }
-    if (!response.ok) throw new Error('bad')
-    return response.json()
-  }).then(function (record) {
-    if (!record) return
+  function showRecord(record) {
     const state = record.valid ? 'Valid' : 'Not valid'
     const calendar = window.SignWindowShared && window.SignWindowShared.ethiopianDate
       ? window.SignWindowShared.ethiopianDate(record.date)
@@ -54,8 +46,31 @@
     paragraph.appendChild(document.createTextNode('Course: ' + record.course + '.'))
     result.appendChild(paragraph)
     const badge = document.getElementById('badge-link')
-    if (badge) badge.href = '/api/certificates/' + encodeURIComponent(id) + '.jsonld'
+    if (badge) badge.href = 'credentials/' + encodeURIComponent(id) + '.jsonld'
+  }
+
+  function fromFile() {
+    return fetch('certificates.json').then(function (response) {
+      if (!response.ok) throw new Error('bad')
+      return response.json()
+    }).then(function (records) {
+      const record = records[id]
+      if (!record) {
+        show('No certificate was found for this ID.')
+        return
+      }
+      showRecord(record)
+    })
+  }
+
+  fetch('/api/certificates/' + encodeURIComponent(id)).then(function (response) {
+    if (!response.ok) throw new Error('bad')
+    return response.json()
+  }).then(function (record) {
+    if (record) showRecord(record)
   }).catch(function () {
-    show('The certificate could not be checked.')
+    fromFile().catch(function () {
+      show('The certificate could not be checked.')
+    })
   })
 })()
