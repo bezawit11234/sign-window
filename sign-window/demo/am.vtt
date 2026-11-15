@@ -1,6 +1,9 @@
 WEBVTT
 
-NOTE DRAFT. Amharic lines are copied from the "am" field in demo/signs.json for the same English word. A fluent speaker must review them. Cues with no dictionary entry are omitted. See docs/amharic-review.md.
+NOTE DRAFT. Most lines are copied from the "am" field in demo/signs.json. የቤተሰብ ምልክቶች, የአጎት ልጅ, and የአክስት ልጅ are not in that dictionary. A fluent speaker must review them. See docs/amharic-review.md.
+
+00:00:04.000 --> 00:00:12.000
+የቤተሰብ ምልክቶች
 
 00:00:12.000 --> 00:00:16.000
 እናት
@@ -13,6 +16,12 @@ NOTE DRAFT. Amharic lines are copied from the "am" field in demo/signs.json for 
 
 00:00:24.000 --> 00:00:32.000
 ታታ
+
+00:00:36.000 --> 00:00:42.000
+የአጎት ልጅ
+
+00:00:44.000 --> 00:00:48.000
+የአክስት ልጅ
 
 00:00:48.000 --> 00:00:52.000
 እህት

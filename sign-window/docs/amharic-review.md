@@ -18,13 +18,18 @@ Status: TODO. A fluent Amharic speaker has not reviewed these lines.
 | Woman. | ሴት | f15 |
 | Relative. | ዝምድና | f17 |
 
-## Left in English because they are not dictionary entries
+## Added for signs she shows that are not in signs.json
+
+A fluent speaker still needs to review these. They are not copied from a dictionary `am` field.
+
+| English cue | Amharic used | Why |
+| --- | --- | --- |
+| Family signs. | የቤተሰብ ምልክቶች | No dictionary entry for this phrase |
+| Uncle's child. | የአጎት ልጅ | No dictionary entry. Child in the dictionary is ልጅ |
+| Aunt's child. | የአክስት ልጅ | No dictionary entry. Child in the dictionary is ልጅ |
+
+## Left in English because they are titles, not signs she shows
 
 - Learn Ethiopian Sign Language with Yekatit 23 School's Deaf Youth. Bahir Dar, Ethiopia.
-- Family signs.
-- Uncle's child.
-- Aunt's child.
 - Made possible by Kal Center for Special Needs.
 - And Visions Global Empowerment.
-
-`ቤተሰብ` was removed from the Family signs cue because that word is not the `am` field of any entry for that cue.
