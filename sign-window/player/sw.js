@@ -1,5 +1,5 @@
 /* Caches the player, fonts, and the demo lesson after the first visit. */
-const CACHE = 'sign-window-v5'
+const CACHE = 'sign-window-v6'
 const PRECACHE = [
   '/',
   '/demo/index.html',

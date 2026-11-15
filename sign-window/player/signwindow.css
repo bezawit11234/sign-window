@@ -47,16 +47,17 @@ sign-window {
 
 .sw-layout {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(180px, var(--sw-dock, 240px));
-  gap: 12px;
-  align-items: stretch;
+  display: block;
   min-width: 0;
 }
 
 .sw-main,
 .sw-dock {
   min-width: 0;
+}
+
+.sw-dock {
+  display: none;
 }
 
 .sw-stage {

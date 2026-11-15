@@ -7,7 +7,7 @@
 (function () {
   const SCRIPT_URL = (document.currentScript && document.currentScript.src) || '/player/signwindow.js'
   const SIZES = [18, 24, 32, 40, 52]
-  const PRESETS = { small: 180, medium: 240, large: 320 }
+  const PRESETS = { small: 160, medium: 240, large: 340 }
   const SETTINGS_KEY = 'sign-window-settings'
   const POSITION_KEY = 'sign-window-position-v2'
 
@@ -939,12 +939,10 @@
     setPreset(name) {
       this.dockPreset = name
       this.signWidth = PRESETS[name] || PRESETS.medium
-      if (this.layout) this.layout.style.setProperty('--sw-dock', this.signWidth + 'px')
       this.smallBtn.setAttribute('aria-pressed', String(name === 'small'))
       this.mediumBtn.setAttribute('aria-pressed', String(name === 'medium'))
       this.largeBtn.setAttribute('aria-pressed', String(name === 'large'))
-      if (this.userPlaced) this.fitSign()
-      else this.applyDefaultPosition()
+      this.fitSign()
       this.persistPosition()
       this.announce('Sign window size ' + name)
     }
@@ -968,21 +966,17 @@
     }
 
     applyDefaultPosition() {
-      if (!this.layout || !this.dock) return
-      const preset = this.dockPreset || (this.layout.clientWidth < 520 ? 'small' : 'medium')
+      if (!this.layout) return
+      const preset = this.dockPreset || (this.layout.clientWidth < 480 ? 'small' : 'medium')
       this.dockPreset = preset
-      this.signWidth = PRESETS[preset] || PRESETS.medium
-      const cap = Math.max(160, this.layout.clientWidth - 16)
-      this.signWidth = Math.min(this.signWidth, cap)
-      this.layout.style.setProperty('--sw-dock', this.signWidth + 'px')
-      this.sign.classList.add('is-docked')
-      const layoutRect = this.layout.getBoundingClientRect()
-      const dockRect = this.dock.getBoundingClientRect()
-      this.signLeft = dockRect.left - layoutRect.left
-      this.signTop = dockRect.top - layoutRect.top
+      const cap = Math.max(140, this.layout.clientWidth - 24)
+      this.signWidth = Math.min(PRESETS[preset] || PRESETS.medium, cap)
+      this.sign.classList.remove('is-docked')
+      this.sign.style.height = ''
       this.smallBtn.setAttribute('aria-pressed', String(preset === 'small'))
       this.mediumBtn.setAttribute('aria-pressed', String(preset === 'medium'))
       this.largeBtn.setAttribute('aria-pressed', String(preset === 'large'))
+      this.userPlaced = false
       this.fitSign()
     }
 
@@ -1004,19 +998,16 @@
 
     fitSign() {
       if (!this.layout) return
-      if (!this.userPlaced && this.dock) {
-        this.sign.classList.add('is-docked')
-        const width = Math.max(160, this.dock.clientWidth || this.signWidth)
-        this.sign.style.width = width + 'px'
-        this.sign.style.height = ''
-        this.signVideo.style.height = this.minimized ? '0px' : Math.round(width * 9 / 16) + 'px'
-        this.clampSign()
-        return
+      this.sign.classList.remove('is-docked')
+      this.sign.style.height = ''
+      const maxWidth = Math.max(140, this.layout.clientWidth - 16)
+      const width = Math.min(this.signWidth, maxWidth)
+      this.sign.style.width = width + 'px'
+      this.signVideo.style.height = this.minimized ? '0px' : Math.round(width * 9 / 16) + 'px'
+      if (!this.userPlaced) {
+        this.signLeft = Math.max(8, this.layout.clientWidth - width - 12)
+        this.signTop = 12
       }
-      this.releaseDock()
-      const maxWidth = Math.max(160, this.layout.clientWidth - 8)
-      this.sign.style.width = Math.min(this.signWidth, maxWidth) + 'px'
-      this.signVideo.style.height = this.minimized ? '0px' : Math.round(Math.min(this.signWidth, maxWidth) * 9 / 16) + 'px'
       this.clampSign()
     }
 

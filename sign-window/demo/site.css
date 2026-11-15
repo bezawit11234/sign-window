@@ -172,10 +172,10 @@ body {
 
 .shell {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr) 300px;
-  gap: 16px;
+  grid-template-columns: 180px minmax(0, 1fr) 210px;
+  gap: 12px;
   align-items: start;
-  width: min(1280px, calc(100% - 24px));
+  width: min(1480px, calc(100% - 16px));
   margin: 16px auto 32px;
 }
 
@@ -290,11 +290,33 @@ html[data-theme="dark"] .cue[aria-current="true"] {
   font-variant-numeric: tabular-nums;
 }
 
+.career-card {
+  padding: 10px;
+  font-size: 0.95rem;
+}
+
+.career-card h2,
+.career-card h3 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
 .career-card .job-title {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--ink);
+}
+
+.career-card p,
+.career-card ul {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.career-card .badge {
+  min-height: 32px;
+  padding: 4px 10px;
 }
 
 .badge {
