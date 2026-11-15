@@ -193,6 +193,12 @@ sign-window {
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 10px 28px rgba(10, 30, 60, 0.18);
+  touch-action: none;
+  cursor: grab;
+}
+
+.sw-sign:active {
+  cursor: grabbing;
 }
 
 .sw-sign-head,
@@ -216,15 +222,26 @@ sign-window {
 }
 
 .sw-sign-bar {
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+}
+
+.sw-sign-bar .sw-size {
+  display: contents;
 }
 
 .sw-sign-head button,
 .sw-sign-bar button {
-  flex: 1 1 0;
+  flex: 1 1 auto;
   min-width: 44px;
   padding: 8px 6px;
   white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.sw-sign-bar button[aria-pressed="true"] {
+  background: #ffffff;
+  color: #0a3d91;
 }
 
 .sw-sign-video {

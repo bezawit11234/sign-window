@@ -204,10 +204,9 @@
       this.minBtn = el('button', { type: 'button', 'aria-pressed': 'false', 'aria-label': 'Min, minimize sign language window' }, 'Min')
       head.appendChild(this.minBtn)
       const bar = el('div', { className: 'sw-sign-bar' })
+      this.signBar = bar
       this.moveBtn = el('button', { className: 'sw-move', type: 'button', 'aria-label': 'Move sign language window', 'aria-keyshortcuts': 'ArrowUp ArrowDown ArrowLeft ArrowRight' }, 'Move')
-      this.resizeBtn = el('button', { className: 'sw-resize', type: 'button', 'aria-label': 'Size, resize sign language window', 'aria-keyshortcuts': 'ArrowUp ArrowDown ArrowLeft ArrowRight' }, 'Size')
       bar.appendChild(this.moveBtn)
-      bar.appendChild(this.resizeBtn)
       this.signVideo = el('video', { className: 'sw-sign-video', muted: '', playsinline: '', 'aria-hidden': 'true' })
       this.label = el('p', { className: 'sw-sign-label' })
       this.label.hidden = true
@@ -314,7 +313,6 @@
       this.settings.appendChild(this.adBtn)
 
       const sizeGroup = el('div', { className: 'sw-group sw-size', role: 'group', 'aria-label': 'Sign window size' })
-      sizeGroup.appendChild(el('span', { className: 'sw-tool-label' }, 'Sign size'))
       this.smallBtn = this.sizeChoice('S', 'small')
       this.mediumBtn = this.sizeChoice('M', 'medium')
       this.largeBtn = this.sizeChoice('L', 'large')
@@ -323,7 +321,7 @@
       sizeGroup.appendChild(this.mediumBtn)
       sizeGroup.appendChild(this.largeBtn)
       sizeGroup.appendChild(this.resetBtn)
-      this.under.appendChild(sizeGroup)
+      this.signBar.appendChild(sizeGroup)
     }
 
     sizeChoice(letter, word) {
@@ -465,16 +463,17 @@
       this.signVideo.addEventListener('error', function () { player.noteMissingClip() })
       document.addEventListener('fullscreenchange', function () { player.syncFullscreen() })
 
-      this.bindDrag(this.moveBtn, 'move')
-      this.bindDrag(this.resizeBtn, 'resize')
+      this.bindDrag(this.sign, 'move')
     }
 
     bindDrag(handle, mode) {
       const player = this
       handle.addEventListener('pointerdown', function (event) {
         if (event.button !== 0) return
-        handle.focus()
-        handle.setPointerCapture(event.pointerId)
+        const pressed = event.target.closest('button, a, input, select')
+        if (pressed && pressed !== player.moveBtn) return
+        event.preventDefault()
+        player.sign.setPointerCapture(event.pointerId)
         player.userPlaced = true
         player.releaseDock()
         player.dragging = {
@@ -1051,11 +1050,6 @@
       if (target === this.moveBtn && key.indexOf('Arrow') === 0) {
         event.preventDefault()
         this.moveSign(key, event.shiftKey ? 50 : 10)
-        return
-      }
-      if (target === this.resizeBtn && key.indexOf('Arrow') === 0) {
-        event.preventDefault()
-        this.resizeByKey(key, event.shiftKey ? 50 : 10)
         return
       }
       if (key === 'Escape' && !this.settings.hidden) {
