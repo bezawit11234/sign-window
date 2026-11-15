@@ -261,7 +261,7 @@
       this.tools.appendChild(this.downloadLink)
       this.help = el('details', { className: 'sw-keys' })
       this.help.appendChild(el('summary', {}, 'Keyboard shortcuts'))
-      this.help.appendChild(el('p', {}, 'When the player is focused: Space or K plays or pauses, Left and Right seek 5 seconds, M mutes, C changes captions, F is full screen. Open Sign window, then focus Move. Arrow keys move the sign window. Shift plus an arrow key moves it 50 pixels. On a narrow screen the sign window stays below the video. Minimize hides the picture and keeps the name.'))
+      this.help.appendChild(el('p', {}, 'When the player is focused: Space or K plays or pauses, Left and Right seek 5 seconds, M mutes, C changes captions, F is full screen. Open Sign window, then focus Move. Arrow keys move the sign window. Shift plus an arrow key moves it 50 pixels. The sign window stays on the lesson video. Minimize hides the picture and keeps the name.'))
       root.appendChild(this.help)
       this.videoError = el('p', { className: 'sw-video-error' }, 'The lesson video could not be loaded.')
       this.videoError.hidden = true
@@ -509,7 +509,6 @@
       const player = this
       handle.addEventListener('pointerdown', function (event) {
         if (event.button !== 0) return
-        if (player.isNarrow()) return
         const pressed = event.target.closest('button, a, input, select')
         if (pressed && pressed !== player.moveBtn) return
         event.preventDefault()
@@ -1141,39 +1140,32 @@
 
     fitSign() {
       if (!this.layout) return
-      if (this.isNarrow()) {
-        this.layout.classList.add('is-narrow')
-        this.sign.classList.add('is-docked')
-        this.sign.style.height = ''
-        this.sign.style.left = 'auto'
-        this.sign.style.top = 'auto'
-        this.sign.style.width = '100%'
-        this.signVideo.style.height = this.minimized ? '0px' : ''
-        this.applyCaptionStyle()
-        return
-      }
-      this.layout.classList.remove('is-narrow')
+      const narrow = this.isNarrow()
+      this.layout.classList.toggle('is-narrow', narrow)
       this.sign.classList.remove('is-docked')
       this.sign.style.height = ''
-      const maxWidth = Math.max(140, this.layout.clientWidth - 16)
+      const stageWidth = (this.stage && this.stage.clientWidth) || this.layout.clientWidth
+      const maxWidth = narrow
+        ? Math.max(112, Math.min(PRESETS.small, Math.round(stageWidth * 0.46)))
+        : Math.max(140, stageWidth - 16)
       const width = Math.min(this.signWidth, maxWidth)
       this.sign.style.width = width + 'px'
       this.signVideo.style.height = this.minimized ? '0px' : Math.round(width * 9 / 16) + 'px'
       if (!this.userPlaced) {
-        this.signLeft = Math.max(8, this.layout.clientWidth - width - 12)
-        this.signTop = 12
+        this.signLeft = Math.max(8, stageWidth - width - 8)
+        this.signTop = 8
       }
       this.clampSign()
       this.applyCaptionStyle()
     }
 
     clampSign() {
-      if (this.isNarrow()) {
-        this.sign.style.left = 'auto'
-        this.sign.style.top = 'auto'
-        return
+      const bounds = this.stage || this.layout
+      let guard = 0
+      while (!this.minimized && bounds.clientHeight > 0 && this.sign.offsetHeight > bounds.clientHeight - 8 && this.signVideo.offsetHeight > 48 && guard < 8) {
+        this.signVideo.style.height = Math.max(48, this.signVideo.offsetHeight - 12) + 'px'
+        guard += 1
       }
-      const bounds = this.layout || this.stage
       const maxLeft = Math.max(0, bounds.clientWidth - this.sign.offsetWidth)
       const maxTop = Math.max(0, bounds.clientHeight - this.sign.offsetHeight)
       this.signLeft = Math.min(Math.max(0, this.signLeft), maxLeft)
@@ -1183,10 +1175,6 @@
     }
 
     moveSign(key, step) {
-      if (this.isNarrow()) {
-        this.announce('The sign window stays below the video on a narrow screen')
-        return
-      }
       this.userPlaced = true
       this.releaseDock()
       if (key === 'ArrowLeft') this.signLeft -= step

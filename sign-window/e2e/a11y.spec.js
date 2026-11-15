@@ -149,8 +149,8 @@ test('layouts at 320, 375, 640, and 1280 do not clip the controls', async functi
     expect(metrics.forward.height).toBeGreaterThanOrEqual(24)
     if (width < 640) {
       expect(metrics.narrow).toBe(true)
+      expect(boxesOverlap(metrics.sign, metrics.stage), 'sign should sit on the video at ' + width).toBe(true)
       expect(boxesOverlap(metrics.sign, metrics.controls), 'sign overlaps controls at ' + width).toBe(false)
-      expect(metrics.sign.y, 'sign should sit below the video at ' + width).toBeGreaterThanOrEqual(metrics.stage.y + metrics.stage.height - 2)
     }
   }
 })

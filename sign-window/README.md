@@ -17,7 +17,7 @@ The free Render server may take up to a minute to wake up after it has been idle
 ## Features
 
 - English and Amharic captions. Five text sizes. Three colour themes: white on black, yellow on black, and black on white. The caption background can be made stronger or lighter.
-- An Ethiopian Sign Language window. On a wide screen it floats, and it can be dragged, resized, and moved with the keyboard. On a narrow screen it sits under the lesson so it does not cover the picture.
+- An Ethiopian Sign Language window. It floats on the lesson video at every screen size, and it can be dragged, resized, and moved with the keyboard.
 - Audio description. Turn it on and a voice describes what is on screen. The same words appear under the video. The demo uses recorded Amharic audio.
 - A written transcript. Choose a line to jump to that moment.
 - An offline pack and a service worker that caches the player, the font, the lesson, and the sign clips after the first visit.
@@ -71,7 +71,7 @@ Add `sign-fallback="lesson"` only when a missing dictionary clip should copy the
 | `sign-fallback` | no | Set to `lesson` to replay the lesson when a clip file is missing. Any other value, including leaving it out, shows the names and "Clip not available offline" |
 | `offline-pack` | no | URL for the **Download for offline** link. If omitted, the link is `family-signs-offline.zip` |
 
-Keyboard shortcuts work while focus is inside the player. Space or K plays or pauses. Left and Right seek 5 seconds. M mutes. C cycles captions (both, English, Amharic, off). F is full screen. Open **Sign window**, focus **Move**, then use the arrow keys. Shift plus an arrow moves 50 pixels. This keyboard move works on a wide screen. Below 640 CSS pixels the window stays under the video.
+Keyboard shortcuts work while focus is inside the player. Space or K plays or pauses. Left and Right seek 5 seconds. M mutes. C cycles captions (both, English, Amharic, off). F is full screen. Open **Sign window**, focus **Move**, then use the arrow keys. Shift plus an arrow moves 50 pixels. The sign window stays on the lesson video at every screen size.
 
 The player was also tested on a mock host page: a separate plain HTML page that added the player with only the script tag.
 
