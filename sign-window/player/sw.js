@@ -2,7 +2,7 @@
  * Paths are relative to the service worker scope, so the same file works
  * at the site root and under a GitHub Pages subpath such as /sign-window/.
  */
-const CACHE = 'sign-window-v13'
+const CACHE = 'sign-window-v14'
 const PRECACHE = [
   '/',
   '/demo/index.html',

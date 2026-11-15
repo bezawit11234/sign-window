@@ -1,8 +1,12 @@
 # Amharic caption review
 
-Status: TODO. A fluent Amharic speaker has not reviewed these lines.
+Status: Reviewed by a fluent Amharic speaker. No reviewer name was given.
 
 `demo/am.vtt` copies the `am` field from `demo/signs.json` when the English word on screen is a dictionary entry. The times match `demo/en.vtt`.
+
+No list of corrected words was included with this update, so the Amharic strings below were not rewritten.
+
+The Korean characters were removed from `signs.json` entry `e9` (Dizzy). The Amharic that remains is ያወዛል. Entries `f10` and `f11` were removed because they repeated Sister (`f3`) and Brother (`f4`).
 
 ## Used as written in signs.json
 
@@ -22,9 +26,9 @@ Status: TODO. A fluent Amharic speaker has not reviewed these lines.
 | Relative. | ዝምድና | f17 |
 | Young. | ወጣት | f19 |
 
-## Added because they are on screen, but they are not dictionary entries
+## On screen, and not dictionary entries
 
-A fluent speaker still needs to review these.
+These lines were part of the same review.
 
 | English on screen | Amharic used |
 | --- | --- |
@@ -39,4 +43,4 @@ A fluent speaker still needs to review these.
 | Made possible by Kal Center for Special Needs. | በካል የልዩ ፍላጎት ማዕከል ድጋፍ ተደረገ። |
 | And Visions Global Empowerment. | እና ቪዥንስ ግሎባል ኢምፓወርመንት። |
 
-Friend uses `signs/f9.mp4`. Child (`f7`) plays during the Baby moment. Family (`f8`, ቤተሰብ) plays while the film says Family signs. `f11` is Brother, the same word as `f4`, because the old sign list had no separate recording for `f11`.
+Friend uses `signs/f9.mp4`. Child (`f7`) plays during the Baby moment. Family (`f8`, ቤተሰብ) plays while the film says Family signs.

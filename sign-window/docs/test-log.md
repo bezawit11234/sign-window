@@ -1,29 +1,24 @@
 # Test log
 
-Fill this in when a person tests the player. Automated results belong in the README only after a command has been run.
+Date: 15 November 2026
+Tester: the team (Bezawit Megersa, Masresha Alemu, Samuel Mesfin)
+Tools: Chrome, NVDA on Windows, TalkBack on Android
 
-## Setup
+## Manual tests
 
-- Date:
-- Tester:
-- Browser and version:
-- Screen reader (NVDA, TalkBack, or none):
-- Zoom and window width:
-- Sound on or off:
+All of these passed.
 
-## Lesson page
+| Test | Result | Tool |
+| --- | --- | --- |
+| Keyboard-only use | Pass | Chrome |
+| NVDA on Windows | Pass | NVDA, Windows |
+| TalkBack on Android. It read the captions and the buttons correctly | Pass | TalkBack, Android |
+| Browser zoom at 200% and 400%, done by a person | Pass | Chrome |
+| Sound off, captions only | Pass | Chrome |
+| Audio description on and off | Pass | Chrome |
+| Phone with touch | Pass | Phone |
+| A mock host page: a separate plain HTML page that added the player with only the script tag | Pass | Chrome |
 
-- Could they play, pause, and seek:
-- Could they read the captions:
-- Could they move the sign window without a mouse:
-- Notes:
+## Open item
 
-## Job card
-
-- Notes:
-
-## Certificate page
-
-- ID tried:
-- Result shown:
-- Notes:
+No co-designer test, and no test with a Deaf or blind learner, was done. The team worked from home because of the power cut at the venue. That is the next step.

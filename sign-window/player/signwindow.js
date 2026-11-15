@@ -252,7 +252,8 @@
       this.settings = el('div', { id: this.idBase + '-settings', className: 'sw-settings' })
       this.settings.hidden = true
       this.tools = el('div', { className: 'sw-tools' })
-      this.downloadLink = el('a', { href: 'family-signs-offline.zip', download: 'sign-window-offline.zip' }, 'Download for offline')
+      const offlinePack = this.getAttribute('offline-pack') || 'family-signs-offline.zip'
+      this.downloadLink = el('a', { href: resolveUrl(offlinePack), download: 'sign-window-offline.zip' }, 'Download for offline')
       this.tools.appendChild(this.settings)
       root.appendChild(this.tools)
 
@@ -1022,7 +1023,8 @@
         'black-on-white': { en: '#1b1b1b', am: '#0a3d91', rgb: [255, 255, 255] }
       }
       const theme = themes[this.theme] || themes['white-on-black']
-      const size = SIZES[this.sizeIndex] || SIZES[1]
+      let size = SIZES[this.sizeIndex] || SIZES[1]
+      if (this.isNarrow()) size = Math.max(16, Math.round(size * 0.75))
       const strength = Math.min(1, Math.max(0.55, this.opacity))
       this.captionEn.style.color = theme.en
       this.captionAm.style.color = theme.am
@@ -1145,9 +1147,9 @@
         this.sign.style.height = ''
         this.sign.style.left = 'auto'
         this.sign.style.top = 'auto'
-        const width = Math.min(220, Math.max(140, this.layout.clientWidth - 16))
-        this.sign.style.width = width + 'px'
-        this.signVideo.style.height = this.minimized ? '0px' : Math.round(width * 9 / 16) + 'px'
+        this.sign.style.width = '100%'
+        this.signVideo.style.height = this.minimized ? '0px' : ''
+        this.applyCaptionStyle()
         return
       }
       this.layout.classList.remove('is-narrow')
@@ -1162,6 +1164,7 @@
         this.signTop = 12
       }
       this.clampSign()
+      this.applyCaptionStyle()
     }
 
     clampSign() {

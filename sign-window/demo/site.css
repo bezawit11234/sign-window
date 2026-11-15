@@ -275,11 +275,20 @@ dd {
 .cue {
   width: 100%;
   justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
   gap: 10px;
+  height: auto;
   text-align: left;
+  white-space: normal;
   color: var(--ink);
   background: var(--page-bg);
   border: 2px solid var(--line);
+}
+
+.cue span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .cue[aria-current="true"] {
@@ -479,17 +488,60 @@ caption {
   margin-bottom: 8px;
 }
 
+img,
+video,
+sign-window {
+  max-width: 100%;
+}
+
 @media (max-width: 640px) {
   .shell {
-    width: calc(100% - 12px);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .shell > main {
+    order: 1;
+  }
+
+  .shell > .side {
+    order: 2;
+  }
+
+  .shell > .career {
+    order: 3;
+  }
+
+  .side,
+  .topnav {
+    width: 100%;
+  }
+
+  .brand {
+    flex: 1 1 12rem;
+    min-width: 0;
+  }
+
+  .brand-sub {
+    font-size: 0.85rem;
   }
 
   main h1 {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
+  }
+
+  .card,
+  .career-card {
+    padding: 12px;
   }
 
   .topbar {
-    padding: 12px;
+    align-items: flex-start;
+    padding: 10px 12px;
   }
 }
 

@@ -36,7 +36,8 @@ test('signs, transcript, and offline pack', async function (t) {
   assert.equal(list[0].en, 'Hello')
   assert.equal(list[0].am, 'ሰላም')
   const dizzy = list.find(function (sign) { return sign.id === 'e9' })
-  assert.equal(dizzy.am, '머리 ያወዛል')
+  assert.equal(dizzy.am, 'ያወዛል')
+  assert.equal(list.some(function (sign) { return sign.id === 'f10' || sign.id === 'f11' }), false)
 
   const vtt = 'WEBVTT\n\n00:00:00.000 --> 00:00:02.000\n<script>alert(1)</script>\n'
   const transcript = await request(port, {

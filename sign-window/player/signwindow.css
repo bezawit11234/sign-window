@@ -307,10 +307,18 @@ sign-window {
   z-index: 1;
   left: auto !important;
   top: auto !important;
+  width: 100% !important;
   max-width: 100%;
   cursor: default;
   touch-action: manipulation;
   box-shadow: none;
+}
+
+.sw-layout.is-narrow .sw-sign-label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
 }
 
 .sw-sign-label,
