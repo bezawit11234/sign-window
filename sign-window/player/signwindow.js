@@ -384,12 +384,20 @@
       })
       this.muteBtn.addEventListener('click', function () { player.toggleMute(true) })
       this.volumeInput.addEventListener('input', function () {
-        player.volume = Number(player.volumeInput.value)
-        player.lesson.volume = player.volume
-        player.muted = player.volume === 0
-        player.lesson.muted = player.muted
+        const level = Number(player.volumeInput.value)
+        player.volume = level
+        if (level > 0) player.savedVolume = level
+        player.muted = level === 0
+        player.applyHearing()
         player.syncMuteUi(false)
         player.persist()
+      })
+      document.addEventListener('miliket-scale', function (event) {
+        const index = event.detail && event.detail.index
+        if (!Number.isInteger(index)) return
+        player.sizeIndex = Math.max(0, Math.min(SIZES.length - 1, index))
+        player.applyCaptionStyle()
+        player.syncChoice(player.sizeButtons, 'size', String(player.sizeIndex))
       })
       this.captionSelect.addEventListener('change', function () {
         player.setLang(player.captionSelect.value, true)
@@ -471,6 +479,7 @@
       this.lesson.addEventListener('seeked', function () {
         player.activeSignId = null
         player.activeAd = null
+        player.haltDescriptionSound()
         player.onTime()
       })
       this.lesson.addEventListener('play', function () { player.syncPlayUi(true, false) })
@@ -539,9 +548,14 @@
     }
 
     applySavedSettings() {
-      this.lesson.volume = this.volume
-      this.lesson.muted = this.muted
-      this.volumeInput.value = String(this.volume)
+      this.savedVolume = this.volume > 0 ? this.volume : 0.5
+      if (this.muted || this.volume === 0) {
+        this.muted = true
+        this.volumeInput.value = '0'
+      } else {
+        this.volumeInput.value = String(this.volume)
+      }
+      this.applyHearing()
       this.lesson.playbackRate = this.rate
       this.rateSelect.value = String(this.rate)
       this.opacityInput.value = String(Math.round(this.opacity * 100))
@@ -713,16 +727,15 @@
         else this.mirrorLesson()
       }
       this.signVideo.playbackRate = this.lesson.playbackRate || 1
-      if (!id) return
+      this.silenceSignVideo()
+      if (this.signMode === 'lesson') this.labelMirror()
       if (this.signMode === 'missing' || !this.signVideo.src) return
-      if (this.signMode === 'lesson' && this.signVideo.src) {
+      if (this.signMode === 'lesson' && this.signVideo.readyState >= 1) {
         const drift = Math.abs((this.signVideo.currentTime || 0) - (this.lesson.currentTime || 0))
-        if (drift > 0.45 && this.signVideo.readyState >= 1) {
-          this.signVideo.currentTime = this.lesson.currentTime || 0
-        }
+        if (drift > 0.45) this.signVideo.currentTime = this.lesson.currentTime || 0
       }
       if (this.lesson.paused) this.signVideo.pause()
-      else if (this.signVideo.src && this.signVideo.paused && !this.signVideo.ended) {
+      else if (this.signVideo.paused && !this.signVideo.ended) {
         this.signVideo.play().catch(function () {})
       }
     }
@@ -764,7 +777,9 @@
       this.empty.hidden = true
       this.sign.classList.add('is-novideo')
       this.signVideo.loop = mode === 'clip'
+      this.silenceSignVideo()
       const seek = function () {
+        player.silenceSignVideo()
         player.sign.classList.remove('is-novideo')
         const target = mode === 'lesson' ? (player.lesson.currentTime || time || 0) : 0
         if (player.signVideo.readyState >= 1) player.signVideo.currentTime = target
@@ -786,9 +801,18 @@
     mirrorLesson() {
       const url = this.lesson.currentSrc || this.lesson.src
       if (!url) return
-      this.label.hidden = true
       this.empty.hidden = true
+      this.labelMirror()
       this.playSignSource(url, this.lesson.currentTime || 0, 'lesson')
+    }
+
+    labelMirror() {
+      const time = this.lesson.currentTime || 0
+      const en = this.linesFor ? this.linesFor('en', time) : ''
+      const am = this.linesFor ? this.linesFor('am', time) : ''
+      this.labelEn.textContent = en
+      this.labelAm.textContent = am
+      this.label.hidden = !en && !am
     }
 
     lessonFallback() {
@@ -838,9 +862,7 @@
       else this.speakDescription(cue.text)
     }
 
-    stopDescription() {
-      this.adBox.hidden = true
-      this.adBox.textContent = ''
+    haltDescriptionSound() {
       if (this.descriptionAudio) {
         this.descriptionAudio.pause()
         this.descriptionAudio = null
@@ -848,7 +870,14 @@
       if (window.speechSynthesis) window.speechSynthesis.cancel()
     }
 
+    stopDescription() {
+      this.adBox.hidden = true
+      this.adBox.textContent = ''
+      this.haltDescriptionSound()
+    }
+
     speakDescription(text) {
+      if (this.muted || this.volume === 0) return
       if (!window.speechSynthesis) return
       const player = this
       let started = false
@@ -871,12 +900,19 @@
     }
 
     playDescriptionAudio(src) {
+      if (this.muted || this.volume === 0) return
       const player = this
+      if (this.descriptionAudio) {
+        this.descriptionAudio.pause()
+        this.descriptionAudio = null
+      }
+      if (window.speechSynthesis) window.speechSynthesis.cancel()
       const audio = new Audio(src)
+      audio.volume = this.volume > 0 ? this.volume : 1
       this.descriptionAudio = audio
-      audio.addEventListener('ended', function () {})
       audio.play().catch(function () {
-        player.speakDescription(player.adBox.textContent.replace(/^Audio description\. /, ''))
+        if (player.descriptionAudio === audio) player.descriptionAudio = null
+        player.speakDescription(player.adBox.textContent)
       })
     }
 
@@ -901,20 +937,46 @@
       if (!playing) this.signVideo.pause()
     }
 
-    toggleMute(announce) {
-      this.muted = !this.muted
-      if (!this.muted && this.volume === 0) {
-        this.volume = 0.5
-        this.volumeInput.value = '0.5'
-        this.lesson.volume = 0.5
+    silenceSignVideo() {
+      if (!this.signVideo) return
+      this.signVideo.muted = true
+      this.signVideo.defaultMuted = true
+      this.signVideo.volume = 0
+    }
+
+    applyHearing() {
+      const silent = this.muted || this.volume === 0
+      this.lesson.muted = silent
+      this.lesson.volume = silent ? 0 : this.volume
+      this.silenceSignVideo()
+      if (this.descriptionAudio) {
+        this.descriptionAudio.muted = silent
+        this.descriptionAudio.volume = silent ? 0 : this.volume
+        if (silent) this.descriptionAudio.pause()
       }
-      this.lesson.muted = this.muted
+      if (silent && window.speechSynthesis) window.speechSynthesis.cancel()
+    }
+
+    toggleMute(announce) {
+      const mutedNow = this.muted || Number(this.volumeInput.value) === 0
+      if (mutedNow) {
+        const back = this.savedVolume > 0 ? this.savedVolume : 0.5
+        this.muted = false
+        this.volume = back
+        this.volumeInput.value = String(back)
+      } else {
+        if (this.volume > 0) this.savedVolume = this.volume
+        this.muted = true
+        this.volume = 0
+        this.volumeInput.value = '0'
+      }
+      this.applyHearing()
       this.syncMuteUi(announce)
       this.persist()
     }
 
     syncMuteUi(announce) {
-      const muted = this.muted || this.volume === 0
+      const muted = this.muted || Number(this.volumeInput.value) === 0
       this.muteBtn.textContent = muted ? 'Unmute' : 'Mute'
       this.muteBtn.setAttribute('aria-pressed', String(muted))
       if (announce) this.announce(muted ? 'Muted' : 'Sound on')
@@ -965,7 +1027,9 @@
       this.captionEn.style.color = theme.en
       this.captionAm.style.color = theme.am
       this.captionBox.style.backgroundColor = 'rgba(' + theme.rgb.join(',') + ',' + strength + ')'
-      this.captionBox.style.fontSize = 'calc(' + size + 'px * var(--kit-scale, 1))'
+      this.captionBox.style.fontSize = size + 'px'
+      this.captionEn.style.fontSize = size + 'px'
+      this.captionAm.style.fontSize = size + 'px'
     }
 
     toggleSettings() {

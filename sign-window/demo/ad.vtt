@@ -1,69 +1,91 @@
 WEBVTT
 
-NOTE Amharic audio description. A fluent speaker should listen and correct any line that does not sound natural.
+NOTE Amharic audio description. Each cue plays a recorded Amharic voice. A fluent speaker should listen and correct any line that does not sound natural.
 
 00:00:00.000 --> 00:00:04.000
 የኢትዮጵያ የምልክት ቋንቋን ከየካቲት 23 ትምህርት ቤት መስማት ከተሳናቸው ወጣቶች ጋር፣ ባሕር ዳር፣ ኢትዮጵያ የሚል ጽሑፍ ይታያል።
+AUDIO:audio/ad-01.mp3
 
 00:00:04.000 --> 00:00:12.000
 የቤተሰብ ምልክቶች ታሳያለች።
+AUDIO:audio/ad-02.mp3
 
 00:00:12.000 --> 00:00:16.000
 የእናትን ምልክት ታሳያለች።
+AUDIO:audio/ad-03.mp3
 
 00:00:16.000 --> 00:00:20.000
 የአያትን ምልክት ታሳያለች።
+AUDIO:audio/ad-04.mp3
 
 00:00:20.000 --> 00:00:24.000
 የአባትን ምልክት ታሳያለች።
+AUDIO:audio/ad-05.mp3
 
 00:00:24.000 --> 00:00:30.000
 የታታን ምልክት ታሳያለች።
+AUDIO:audio/ad-06.mp3
 
 00:00:30.000 --> 00:00:34.000
 የአጎትን ምልክት ታሳያለች።
+AUDIO:audio/ad-07.mp3
 
 00:00:35.500 --> 00:00:38.000
 የአጎት ልጅ ምልክት ታሳያለች።
+AUDIO:audio/ad-08.mp3
 
 00:00:38.000 --> 00:00:42.500
 የአክስትን ምልክት ታሳያለች።
+AUDIO:audio/ad-09.mp3
 
 00:00:43.000 --> 00:00:48.000
 የአክስት ልጅ ምልክት ታሳያለች።
+AUDIO:audio/ad-10.mp3
 
 00:00:48.000 --> 00:00:52.000
 የእህትን ምልክት ታሳያለች።
+AUDIO:audio/ad-11.mp3
 
 00:00:52.000 --> 00:00:56.000
 የወንድምን ምልክት ታሳያለች።
+AUDIO:audio/ad-12.mp3
 
 00:00:56.000 --> 00:00:59.500
 የሴት ልጅ ምልክት ታሳያለች።
+AUDIO:audio/ad-13.mp3
 
 00:00:59.500 --> 00:01:02.500
 የወንድ ልጅ ምልክት ታሳያለች።
+AUDIO:audio/ad-14.mp3
 
 00:01:03.500 --> 00:01:06.500
 የወንድ ምልክት ታሳያለች።
+AUDIO:audio/ad-15.mp3
 
 00:01:06.500 --> 00:01:11.500
 የሴትን ምልክት ታሳያለች።
+AUDIO:audio/ad-16.mp3
 
 00:01:11.500 --> 00:01:14.000
 የሕፃን ምልክት ታሳያለች።
+AUDIO:audio/ad-17.mp3
 
 00:01:14.000 --> 00:01:18.000
 የጓደኛ ምልክት ታሳያለች።
+AUDIO:audio/ad-18.mp3
 
 00:01:18.000 --> 00:01:22.000
 የዝምድና ምልክት ታሳያለች።
+AUDIO:audio/ad-19.mp3
 
 00:01:22.000 --> 00:01:25.000
 የወጣት ምልክት ታሳያለች።
+AUDIO:audio/ad-20.mp3
 
 00:01:26.000 --> 00:01:29.000
 አመሰግናለሁ ትላለች።
+AUDIO:audio/ad-21.mp3
 
 00:01:30.000 --> 00:01:39.500
 ምስጋናው ለካል የልዩ ፍላጎት ማዕከል እና ለቪዥንስ ግሎባል ኢምፓወርመንት ቀርቧል።
+AUDIO:audio/ad-22.mp3

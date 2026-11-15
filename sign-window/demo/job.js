@@ -12,6 +12,7 @@
   const button = document.getElementById('play-summary')
   const status = document.getElementById('audio-status')
   const summary = document.getElementById('summary-am').textContent
+  let jobAudio = null
 
   function amharicVoice() {
     const voices = window.speechSynthesis.getVoices() || []
@@ -32,22 +33,26 @@
     const voice = amharicVoice()
     if (voice) utterance.voice = voice
     utterance.onend = function () {
-      status.textContent = voice
-        ? 'The Amharic summary finished. The same words are written below.'
-        : 'No Amharic voice is installed, so this may not sound Amharic. The words are written below.'
+      status.textContent = 'The Amharic summary finished. The same words are written below.'
     }
     window.speechSynthesis.speak(utterance)
-    status.textContent = voice
-      ? 'Playing the Amharic summary. The same words are written below.'
-      : 'No Amharic voice is installed. Add Amharic in Windows speech settings. The words are written below.'
+    status.textContent = 'Playing the Amharic summary. The same words are written below.'
   }
 
   button.addEventListener('click', function () {
-    const start = function () { speak(summary) }
-    if (window.speechSynthesis && window.speechSynthesis.getVoices().length) start()
-    else if (window.speechSynthesis) {
-      window.speechSynthesis.addEventListener('voiceschanged', start, { once: true })
-      window.setTimeout(start, 400)
-    } else start()
+    if (jobAudio) {
+      jobAudio.pause()
+      jobAudio = null
+    }
+    const audio = new Audio('audio/job-summary.mp3')
+    jobAudio = audio
+    audio.addEventListener('ended', function () {
+      status.textContent = 'The Amharic summary finished. The same words are written below.'
+    })
+    audio.play().then(function () {
+      status.textContent = 'Playing the Amharic summary. The same words are written below.'
+    }).catch(function () {
+      speak(summary)
+    })
   })
 })()

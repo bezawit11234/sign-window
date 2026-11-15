@@ -20,8 +20,10 @@
 
   function applyScale(next) {
     scale = next
+    const index = Math.max(0, steps.indexOf(scale))
     root.style.fontSize = (16 * scale) + 'px'
     root.style.setProperty('--kit-scale', String(scale))
+    document.dispatchEvent(new CustomEvent('miliket-scale', { detail: { index: index } }))
     persist()
   }
 

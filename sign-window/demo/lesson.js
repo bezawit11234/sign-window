@@ -50,7 +50,7 @@
     const on = ad.getAttribute('aria-pressed') === 'true'
     adToggle.setAttribute('aria-pressed', String(on))
     adToggle.textContent = on ? 'Turn audio description off' : 'Turn audio description on'
-    if (adStatus) adStatus.textContent = on ? 'Audio description is on. The words also appear under the video.' : 'Audio description is off.'
+    if (adStatus) adStatus.textContent = on ? 'Audio description is on. It is spoken in Amharic, and the same words appear under the video.' : 'Audio description is off.'
     return button
   }
 
@@ -84,31 +84,47 @@
     syncAd()
   }
 
+  let jobAudio = null
+
+  function speakJob(text) {
+    if (!window.speechSynthesis) {
+      jobStatus.textContent = 'This device cannot speak. The same summary is written below.'
+      return
+    }
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = 'am-ET'
+    const voices = window.speechSynthesis.getVoices() || []
+    let voice = null
+    for (let v = 0; v < voices.length; v += 1) {
+      if (/^am([-_]|$)/i.test(voices[v].lang || '')) voice = voices[v]
+    }
+    if (voice) utterance.voice = voice
+    utterance.onend = function () {
+      jobStatus.textContent = 'The Amharic summary finished. The same words are on the job card.'
+    }
+    window.speechSynthesis.speak(utterance)
+    jobStatus.textContent = voice
+      ? 'Playing the Amharic summary.'
+      : 'The recorded summary could not play. The words are on the job card.'
+  }
+
   if (listen && jobSummary && jobStatus) {
     listen.addEventListener('click', function () {
-      const text = jobSummary.textContent
-      if (!window.speechSynthesis) {
-        jobStatus.textContent = 'This device cannot speak. The same summary is written below.'
-        return
+      if (jobAudio) {
+        jobAudio.pause()
+        jobAudio = null
       }
-      window.speechSynthesis.cancel()
-      const utterance = new SpeechSynthesisUtterance(text)
-      utterance.lang = 'am-ET'
-      const voices = window.speechSynthesis.getVoices() || []
-      let voice = null
-      for (let v = 0; v < voices.length; v += 1) {
-        if (/^am([-_]|$)/i.test(voices[v].lang || '')) voice = voices[v]
-      }
-      if (voice) utterance.voice = voice
-      utterance.onend = function () {
-        jobStatus.textContent = voice
-          ? 'The Amharic summary finished. The same words are on the job card.'
-          : 'No Amharic voice is installed, so this may not sound Amharic. The words are on the job card.'
-      }
-      window.speechSynthesis.speak(utterance)
-      jobStatus.textContent = voice
-        ? 'Playing the Amharic summary.'
-        : 'No Amharic voice is installed. Add Amharic in Windows speech settings.'
+      const audio = new Audio('audio/job-summary.mp3')
+      jobAudio = audio
+      audio.addEventListener('ended', function () {
+        jobStatus.textContent = 'The Amharic summary finished. The same words are on the job card.'
+      })
+      audio.play().then(function () {
+        jobStatus.textContent = 'Playing the Amharic summary.'
+      }).catch(function () {
+        speakJob(jobSummary.textContent)
+      })
     })
   }
 

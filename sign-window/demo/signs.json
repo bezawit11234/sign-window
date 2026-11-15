@@ -192,6 +192,14 @@
     "driveId": "1k3RAQJlrVBIYKXdF4nDGQlmpTVL66cEt"
   },
   {
+    "id": "f8",
+    "en": "Family",
+    "am": "ቤተሰብ",
+    "category": "family",
+    "video": "signs/f8.mp4",
+    "driveId": ""
+  },
+  {
     "id": "f9",
     "en": "Friend",
     "am": "ጓደኛ",
@@ -206,6 +214,14 @@
     "category": "family",
     "video": "signs/f10.mp4",
     "driveId": "19gZH4a-Qdul8qeEM7PRn43l67feBdBIy"
+  },
+  {
+    "id": "f11",
+    "en": "Brother",
+    "am": "ወንድም",
+    "category": "family",
+    "video": "signs/f11.mp4",
+    "driveId": ""
   },
   {
     "id": "f12",

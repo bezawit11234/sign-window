@@ -2,7 +2,7 @@
  * Paths are relative to the service worker scope, so the same file works
  * at the site root and under a GitHub Pages subpath such as /sign-window/.
  */
-const CACHE = 'sign-window-v10'
+const CACHE = 'sign-window-v13'
 const PRECACHE = [
   '/',
   '/demo/index.html',
@@ -21,6 +21,29 @@ const PRECACHE = [
   '/demo/en.vtt',
   '/demo/am.vtt',
   '/demo/ad.vtt',
+  '/demo/audio/ad-01.mp3',
+  '/demo/audio/ad-02.mp3',
+  '/demo/audio/ad-03.mp3',
+  '/demo/audio/ad-04.mp3',
+  '/demo/audio/ad-05.mp3',
+  '/demo/audio/ad-06.mp3',
+  '/demo/audio/ad-07.mp3',
+  '/demo/audio/ad-08.mp3',
+  '/demo/audio/ad-09.mp3',
+  '/demo/audio/ad-10.mp3',
+  '/demo/audio/ad-11.mp3',
+  '/demo/audio/ad-12.mp3',
+  '/demo/audio/ad-13.mp3',
+  '/demo/audio/ad-14.mp3',
+  '/demo/audio/ad-15.mp3',
+  '/demo/audio/ad-16.mp3',
+  '/demo/audio/ad-17.mp3',
+  '/demo/audio/ad-18.mp3',
+  '/demo/audio/ad-19.mp3',
+  '/demo/audio/ad-20.mp3',
+  '/demo/audio/ad-21.mp3',
+  '/demo/audio/ad-22.mp3',
+  '/demo/audio/job-summary.mp3',
   '/demo/lesson.mp4',
   '/demo/family-signs-offline.zip',
   '/demo/signs/f1.mp4',
@@ -29,6 +52,11 @@ const PRECACHE = [
   '/demo/signs/f4.mp4',
   '/demo/signs/f5.mp4',
   '/demo/signs/f6.mp4',
+  '/demo/signs/f7.mp4',
+  '/demo/signs/f8.mp4',
+  '/demo/signs/f9.mp4',
+  '/demo/signs/f10.mp4',
+  '/demo/signs/f11.mp4',
   '/demo/signs/f12.mp4',
   '/demo/signs/f15.mp4',
   '/demo/signs/f17.mp4',
@@ -88,7 +116,7 @@ self.addEventListener('fetch', function (event) {
   if (rel == null || rel.indexOf('api/') === 0) return
 
   const html = rel === '' || rel.endsWith('.html')
-  const fresh = html || /\.(mp4|vtt|json|js|css|zip)$/.test(rel)
+  const fresh = html || /\.(mp4|mp3|vtt|json|js|css|zip)$/.test(rel)
   event.respondWith(caches.open(CACHE).then(function (cache) {
     if (fresh) {
       return fetch(event.request).then(function (response) {

@@ -1,4 +1,5 @@
 [
+  { "start": 4, "end": 12, "signId": "f8" },
   { "start": 12, "end": 16, "signId": "f1" },
   { "start": 16, "end": 20, "signId": "f5" },
   { "start": 20, "end": 24, "signId": "f2" },
@@ -7,5 +8,7 @@
   { "start": 52, "end": 56, "signId": "f4" },
   { "start": 56, "end": 59.5, "signId": "f12" },
   { "start": 66.5, "end": 71.5, "signId": "f15" },
+  { "start": 71.5, "end": 74, "signId": "f7" },
+  { "start": 74, "end": 78, "signId": "f9" },
   { "start": 78, "end": 82, "signId": "f17" }
 ]

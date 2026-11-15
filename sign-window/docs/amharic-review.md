@@ -39,4 +39,4 @@ A fluent speaker still needs to review these.
 | Made possible by Kal Center for Special Needs. | በካል የልዩ ፍላጎት ማዕከል ድጋፍ ተደረገ። |
 | And Visions Global Empowerment. | እና ቪዥንስ ግሎባል ኢምፓወርመንት። |
 
-Boy, man, friend, and young are in the dictionary, but this lesson does not have their clip files. During those moments the small window shows the lesson film itself.
+Friend uses `signs/f9.mp4`. Child (`f7`) plays during the Baby moment. Family (`f8`, ቤተሰብ) plays while the film says Family signs. `f11` is Brother, the same word as `f4`, because the old sign list had no separate recording for `f11`.
