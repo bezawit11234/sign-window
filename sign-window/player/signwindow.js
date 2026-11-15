@@ -480,7 +480,11 @@
         player.videoError.hidden = false
         player.announce('The lesson video could not be loaded')
       })
-      this.signVideo.addEventListener('error', function () { player.noteMissingClip() })
+      this.signVideo.addEventListener('error', function () {
+        if (player.signMode === 'lesson' || player.signMode === 'missing') return
+        if (!player.signVideo.getAttribute('src')) return
+        player.noteMissingClip()
+      })
       this.signVideo.addEventListener('ended', function () {
         if (player.signMode !== 'clip' || player.lesson.paused) return
         player.signVideo.currentTime = 0
@@ -703,9 +707,10 @@
       if (!window.SignWindowShared) return
       const entry = window.SignWindowShared.activeAt(this.timeline, this.lesson.currentTime || 0)
       const id = entry && entry.signId ? entry.signId : null
-      if (id !== this.activeSignId) {
+      if (id !== this.activeSignId || (!id && this.signMode !== 'lesson')) {
         this.activeSignId = id
-        this.showSign(id, entry ? entry.start : 0)
+        if (id) this.showSign(id, entry ? entry.start : 0)
+        else this.mirrorLesson()
       }
       this.signVideo.playbackRate = this.lesson.playbackRate || 1
       if (!id) return
@@ -726,13 +731,7 @@
       const player = this
       const sign = id ? this.signMap.get(id) : null
       if (!sign) {
-        this.signMode = ''
-        this.label.hidden = true
-        this.empty.hidden = false
-        this.empty.textContent = 'No key-term sign at this moment.'
-        this.signVideo.removeAttribute('src')
-        this.signVideo.load()
-        this.sign.classList.add('is-novideo')
+        this.mirrorLesson()
         return
       }
       this.labelEn.textContent = sign.en || ''
@@ -784,6 +783,14 @@
       }
     }
 
+    mirrorLesson() {
+      const url = this.lesson.currentSrc || this.lesson.src
+      if (!url) return
+      this.label.hidden = true
+      this.empty.hidden = true
+      this.playSignSource(url, this.lesson.currentTime || 0, 'lesson')
+    }
+
     lessonFallback() {
       return this.getAttribute('sign-fallback') === 'lesson'
     }
@@ -802,6 +809,7 @@
     }
 
     noteMissingClip() {
+      if (this.signMode === 'lesson' || this.signMode === 'missing') return
       if (!this.activeSignId) return
       const sign = this.signMap.get(this.activeSignId)
       if (this.lessonFallback()) {
