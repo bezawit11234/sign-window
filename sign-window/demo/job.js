@@ -11,39 +11,43 @@
 
   const button = document.getElementById('play-summary')
   const status = document.getElementById('audio-status')
-  const summary = document.getElementById('summary').textContent
+  const summary = document.getElementById('summary-am').textContent
+
+  function amharicVoice() {
+    const voices = window.speechSynthesis.getVoices() || []
+    for (let i = 0; i < voices.length; i += 1) {
+      if (/^am([-_]|$)/i.test(voices[i].lang || '')) return voices[i]
+    }
+    return null
+  }
 
   function speak(text) {
     if (!window.speechSynthesis) {
-      status.textContent = 'This device cannot speak. The same summary is written below.'
+      status.textContent = 'This device cannot speak. The Amharic summary is written below.'
       return
     }
     window.speechSynthesis.cancel()
     const utterance = new SpeechSynthesisUtterance(text)
-    utterance.lang = 'en'
+    utterance.lang = 'am-ET'
+    const voice = amharicVoice()
+    if (voice) utterance.voice = voice
     utterance.onend = function () {
-      status.textContent = 'Audio summary finished. The same words are written below.'
+      status.textContent = voice
+        ? 'The Amharic summary finished. The same words are written below.'
+        : 'No Amharic voice is installed, so this may not sound Amharic. The words are written below.'
     }
     window.speechSynthesis.speak(utterance)
-    status.textContent = 'Playing the audio summary. The same words are written below.'
+    status.textContent = voice
+      ? 'Playing the Amharic summary. The same words are written below.'
+      : 'No Amharic voice is installed. Add Amharic in Windows speech settings. The words are written below.'
   }
 
   button.addEventListener('click', function () {
-    status.textContent = 'Checking for the audio summary'
-    fetch('job-summary.mp3').then(function (response) {
-      if (!response.ok) throw new Error('missing')
-      return response.blob()
-    }).then(function (blob) {
-      const audio = new Audio(URL.createObjectURL(blob))
-      audio.addEventListener('ended', function () {
-        URL.revokeObjectURL(audio.src)
-        status.textContent = 'Audio summary finished. The same words are written below.'
-      })
-      return audio.play().then(function () {
-        status.textContent = 'Playing the recorded audio summary. The same words are written below.'
-      })
-    }).catch(function () {
-      speak(summary)
-    })
+    const start = function () { speak(summary) }
+    if (window.speechSynthesis && window.speechSynthesis.getVoices().length) start()
+    else if (window.speechSynthesis) {
+      window.speechSynthesis.addEventListener('voiceschanged', start, { once: true })
+      window.setTimeout(start, 400)
+    } else start()
   })
 })()

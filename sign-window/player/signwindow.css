@@ -291,7 +291,8 @@ sign-window {
   object-fit: contain;
 }
 
-.sw-sign.is-min .sw-sign-video {
+.sw-sign.is-min .sw-sign-video,
+.sw-sign.is-novideo .sw-sign-video {
   display: none;
 }
 

@@ -74,6 +74,15 @@
     }
   }
 
+  function amharicVoice() {
+    if (!window.speechSynthesis || !window.speechSynthesis.getVoices) return null
+    const voices = window.speechSynthesis.getVoices() || []
+    for (let i = 0; i < voices.length; i += 1) {
+      if (/^am([-_]|$)/i.test(voices[i].lang || '')) return voices[i]
+    }
+    return null
+  }
+
   let sequence = 0
 
   class SignWindow extends HTMLElement {
@@ -472,6 +481,11 @@
         player.announce('The lesson video could not be loaded')
       })
       this.signVideo.addEventListener('error', function () { player.noteMissingClip() })
+      this.signVideo.addEventListener('ended', function () {
+        if (player.signMode !== 'clip' || player.lesson.paused) return
+        player.signVideo.currentTime = 0
+        player.signVideo.play().catch(function () {})
+      })
       document.addEventListener('fullscreenchange', function () { player.syncFullscreen() })
 
       this.bindDrag(this.sign, 'move')
@@ -718,6 +732,7 @@
         this.empty.textContent = 'No key-term sign at this moment.'
         this.signVideo.removeAttribute('src')
         this.signVideo.load()
+        this.sign.classList.add('is-novideo')
         return
       }
       this.labelEn.textContent = sign.en || ''
@@ -748,7 +763,10 @@
       }
       this.signMode = mode
       this.empty.hidden = true
+      this.sign.classList.add('is-novideo')
+      this.signVideo.loop = mode === 'clip'
       const seek = function () {
+        player.sign.classList.remove('is-novideo')
         const target = mode === 'lesson' ? (player.lesson.currentTime || time || 0) : 0
         if (player.signVideo.readyState >= 1) player.signVideo.currentTime = target
         const playing = player.signVideo.play()
@@ -775,6 +793,7 @@
       this.signVideo.pause()
       this.signVideo.removeAttribute('src')
       this.signVideo.load()
+      this.sign.classList.add('is-novideo')
       this.labelEn.textContent = (sign && sign.en) || ''
       this.labelAm.textContent = (sign && sign.am) || ''
       this.label.hidden = false
@@ -804,7 +823,8 @@
       if (cue === this.activeAd) return
       this.activeAd = cue
       this.adBox.hidden = false
-      this.adBox.textContent = 'Audio description. ' + cue.text
+      this.adBox.lang = 'am'
+      this.adBox.textContent = cue.text
       this.announce(cue.text)
       if (cue.audio) this.playDescriptionAudio(resolveUrl(cue.audio))
       else this.speakDescription(cue.text)
@@ -821,28 +841,32 @@
     }
 
     speakDescription(text) {
-      const player = this
       if (!window.speechSynthesis) return
-      const wasPlaying = !this.lesson.paused
-      if (wasPlaying) this.lesson.pause()
-      window.speechSynthesis.cancel()
-      const utterance = new SpeechSynthesisUtterance(text)
-      utterance.lang = 'en'
-      utterance.onend = function () {
-        if (wasPlaying && player.adOn) player.lesson.play().catch(function () {})
+      const player = this
+      let started = false
+      const start = function () {
+        if (started || !player.adOn) return
+        started = true
+        window.speechSynthesis.cancel()
+        const utterance = new SpeechSynthesisUtterance(text)
+        utterance.lang = 'am-ET'
+        const voice = amharicVoice()
+        if (voice) utterance.voice = voice
+        else player.announce('No Amharic voice is installed on this device')
+        window.speechSynthesis.speak(utterance)
       }
-      window.speechSynthesis.speak(utterance)
+      if (window.speechSynthesis.getVoices().length) start()
+      else {
+        window.speechSynthesis.addEventListener('voiceschanged', start, { once: true })
+        window.setTimeout(start, 400)
+      }
     }
 
     playDescriptionAudio(src) {
       const player = this
       const audio = new Audio(src)
       this.descriptionAudio = audio
-      const wasPlaying = !this.lesson.paused
-      if (wasPlaying) this.lesson.pause()
-      audio.addEventListener('ended', function () {
-        if (wasPlaying && player.adOn) player.lesson.play().catch(function () {})
-      })
+      audio.addEventListener('ended', function () {})
       audio.play().catch(function () {
         player.speakDescription(player.adBox.textContent.replace(/^Audio description\. /, ''))
       })

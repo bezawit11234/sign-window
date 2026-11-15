@@ -93,12 +93,22 @@
       }
       window.speechSynthesis.cancel()
       const utterance = new SpeechSynthesisUtterance(text)
-      utterance.lang = 'en'
+      utterance.lang = 'am-ET'
+      const voices = window.speechSynthesis.getVoices() || []
+      let voice = null
+      for (let v = 0; v < voices.length; v += 1) {
+        if (/^am([-_]|$)/i.test(voices[v].lang || '')) voice = voices[v]
+      }
+      if (voice) utterance.voice = voice
       utterance.onend = function () {
-        jobStatus.textContent = 'Audio summary finished. The same words are written below.'
+        jobStatus.textContent = voice
+          ? 'The Amharic summary finished. The same words are on the job card.'
+          : 'No Amharic voice is installed, so this may not sound Amharic. The words are on the job card.'
       }
       window.speechSynthesis.speak(utterance)
-      jobStatus.textContent = 'Playing the audio summary. The same words are written below.'
+      jobStatus.textContent = voice
+        ? 'Playing the Amharic summary.'
+        : 'No Amharic voice is installed. Add Amharic in Windows speech settings.'
     })
   }
 
