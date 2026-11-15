@@ -1,5 +1,8 @@
-/* Caches the player, fonts, and the demo lesson after the first visit. */
-const CACHE = 'sign-window-v8'
+/* Caches the player, fonts, and the demo lesson after the first visit.
+ * Paths are relative to the service worker scope, so the same file works
+ * at the site root and under a GitHub Pages subpath such as /sign-window/.
+ */
+const CACHE = 'sign-window-v9'
 const PRECACHE = [
   '/',
   '/demo/index.html',
@@ -19,6 +22,7 @@ const PRECACHE = [
   '/demo/am.vtt',
   '/demo/ad.vtt',
   '/demo/lesson.mp4',
+  '/demo/family-signs-offline.zip',
   '/demo/signs/f1.mp4',
   '/demo/signs/f2.mp4',
   '/demo/signs/f3.mp4',
@@ -32,14 +36,33 @@ const PRECACHE = [
   '/player/signwindow.css',
   '/player/media.js',
   '/player/sw.js',
+  '/sw.js',
   '/player/fonts/noto-sans-ethiopic-ethiopic-400-normal.woff2',
   '/player/fonts/noto-sans-ethiopic-latin-400-normal.woff2',
   '/player/fonts/noto-sans-ethiopic-latin-ext-400-normal.woff2'
 ]
 
+function scopeUrl() {
+  return new URL(self.registration.scope)
+}
+
+function abs(path) {
+  return new URL(String(path).replace(/^\//, ''), scopeUrl()).href
+}
+
+function relativePath(url) {
+  const base = scopeUrl().pathname
+  const path = url.pathname
+  if (base === '/') return path.replace(/^\//, '')
+  const prefix = base.endsWith('/') ? base : base + '/'
+  if (path === prefix.slice(0, -1) || path === prefix) return ''
+  if (path.startsWith(prefix)) return path.slice(prefix.length)
+  return null
+}
+
 self.addEventListener('install', function (event) {
   event.waitUntil(caches.open(CACHE).then(function (cache) {
-    return cache.addAll(PRECACHE)
+    return cache.addAll(PRECACHE.map(abs))
   }).then(function () {
     return self.skipWaiting()
   }))
@@ -61,10 +84,11 @@ self.addEventListener('fetch', function (event) {
   const url = new URL(event.request.url)
   if (event.request.method !== 'GET') return
   if (url.origin !== self.location.origin) return
-  if (url.pathname.startsWith('/api/')) return
+  const rel = relativePath(url)
+  if (rel == null || rel.indexOf('api/') === 0) return
 
-  const html = url.pathname.endsWith('.html') || url.pathname === '/'
-  const fresh = html || /\.(mp4|vtt|json|js|css)$/.test(url.pathname)
+  const html = rel === '' || rel.endsWith('.html')
+  const fresh = html || /\.(mp4|vtt|json|js|css|zip)$/.test(rel)
   event.respondWith(caches.open(CACHE).then(function (cache) {
     if (fresh) {
       return fetch(event.request).then(function (response) {
@@ -82,7 +106,7 @@ self.addEventListener('fetch', function (event) {
     return cache.match(event.request).then(function (cached) {
       if (cached) return cached
       return fetch(event.request).then(function (response) {
-        if (response && response.ok && (url.pathname.startsWith('/player/') || url.pathname.startsWith('/demo/'))) {
+        if (response && response.ok && (rel.indexOf('player/') === 0 || rel.indexOf('demo/') === 0)) {
           cache.put(event.request, response.clone())
         }
         return response

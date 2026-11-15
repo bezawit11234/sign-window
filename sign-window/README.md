@@ -102,7 +102,7 @@ Details are in `docs/openapi.yaml`.
 - `GET /api/signs` returns the dictionary.
 - `GET /api/transcript` returns the Family signs transcript as HTML, with English and Amharic in a table. Amharic cells are empty when `demo/am.vtt` has no cue at that time.
 - `POST /api/transcript` accepts WebVTT (`text/vtt`, `text/plain`, or JSON `{ "vtt" }`, max 512 KB) and returns an HTML transcript. `?lang=en` or `?lang=am`. `?title=` is optional and limited to 120 characters.
-- `GET /api/offline-pack?lesson=family-signs` returns a zip. `greetings-numbers` is still accepted as an alias for the same files. Any other lesson id is rejected.
+- `GET /api/offline-pack?lesson=family-signs` returns a zip. `greetings-numbers` is still accepted as an alias for the same files. Any other lesson id is rejected. The lesson page button points at `demo/family-signs-offline.zip`, which is that same pack saved in the repo, so the download works on GitHub Pages.
 - `GET /api/certificates/:id` returns the demo certificate JSON.
 - `GET /api/certificates/:id.jsonld` returns schema.org `EducationalOccupationalCredential` JSON-LD for that demo record. It is not a signed Open Badges 3.0 credential.
 
@@ -118,11 +118,13 @@ The job deadline 30 November 2026 and the certificate dates are also formatted w
 
 `Dockerfile` has a `HEALTHCHECK` that requests `/demo/index.html`. `docker-compose.yml` sets `restart: unless-stopped`. `.dockerignore` excludes `*.md`, tests, and `node_modules`. It does not exclude `server/`, `player/`, or `demo/`.
 
-Docker client 29.8.2 is installed on this machine. The engine was not running (`dockerDesktopLinuxEngine` pipe missing), so `docker compose up --build` was **not** run here. Do not treat Docker as tested until you run it.
+`docker compose up --build` was run on Windows with Docker Desktop on 15 November 2026 and served http://localhost:3000.
 
 ```bash
 docker compose up --build
 ```
+
+`render.yaml` at the repository root is a Render Docker web service. The Dockerfile context is `sign-window/`. Render should use the `PORT` it injects. The health check path is `/demo/index.html`.
 
 ## Tests run on 15 November 2026
 
@@ -148,7 +150,7 @@ From `sign-window/`, in installed Google Chrome (Playwright channel `chrome`):
 - Amharic captions are a draft. They copy the `am` field from `demo/signs.json` and nothing else. A fluent speaker has not reviewed them. The list is `docs/amharic-review.md`.
 - Amharic speech uses the device voice, if the device has one. This project does not ship a speech engine.
 - The offline service worker caches the player, fonts, the lesson film, and the nine sign clips above. It does not cache every file a host might add later.
-- No NVDA, TalkBack, or Deaf co-designer session has been run. Do not write that those passed.
+- No testing with Deaf or blind learners has been done. NVDA and TalkBack have not been run.
 - Browser zoom at 200% and 400% in a normal browser window, used by a person, was not done. The Playwright zoom check above is not that test.
 - The print flow is HTML plus the browser print dialog. It is not a tagged PDF.
 - The certificate JSON-LD is demo data. It is not a signed Open Badges credential.
@@ -161,15 +163,8 @@ From `sign-window/`, in installed Google Chrome (Playwright channel `chrome`):
 - Server: Node.js, Express, archiver.
 - Tests: Node's test runner, Playwright, axe-core.
 
-## Co-design
+## Team
 
-TODO. A person must fill this in before the panel scores the module:
+Bezawit Megersa, Masresha Alemu, Samuel Mesfin.
 
-- [ ] Deaf co-designer name and how they want to be credited
-- [ ] Date and place of the unaided session
-- [ ] The task they were asked to complete
-- [ ] What they finished without help
-- [ ] What blocked them
-- [ ] What you changed afterwards
-
-Write the session in `docs/cocreation-notes.md`. Use `docs/test-log.md` for NVDA, TalkBack, and zoom notes. The steps for the session are in `docs/final-test-script.md`.
+No testing with Deaf or blind learners has been done.

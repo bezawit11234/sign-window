@@ -44,4 +44,4 @@ npm run a11y
 `npm test`: 13 passed, 0 failed.
 `npm run a11y`: 12 passed, 0 failed, in installed Google Chrome (Playwright channel `chrome`).
 
-NVDA, TalkBack, a person's 200% and 400% browser zoom, and the co-designer session are still TO TEST.
+No testing with Deaf or blind learners has been done. NVDA, TalkBack, and a person's 200% and 400% browser zoom are still TO TEST.

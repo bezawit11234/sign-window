@@ -31,8 +31,9 @@
   function registerWorker() {
     if (!('serviceWorker' in navigator)) return
     if (location.protocol !== 'http:' && location.protocol !== 'https:') return
-    const worker = new URL('sw.js', SCRIPT_URL)
-    navigator.serviceWorker.register(worker, { scope: '/' }).catch(function () {})
+    const worker = new URL('../sw.js', SCRIPT_URL)
+    const scope = new URL('./', worker)
+    navigator.serviceWorker.register(worker, { scope: scope.href }).catch(function () {})
   }
 
   function el(tag, attrs, text) {
@@ -242,7 +243,7 @@
       this.settings = el('div', { id: this.idBase + '-settings', className: 'sw-settings' })
       this.settings.hidden = true
       this.tools = el('div', { className: 'sw-tools' })
-      this.downloadLink = el('a', { href: '/api/offline-pack', download: 'sign-window-offline.zip' }, 'Download for offline')
+      this.downloadLink = el('a', { href: 'family-signs-offline.zip', download: 'sign-window-offline.zip' }, 'Download for offline')
       this.tools.appendChild(this.settings)
       root.appendChild(this.tools)
 

@@ -63,14 +63,7 @@
     })
   }
 
-  fetch('/api/certificates/' + encodeURIComponent(id)).then(function (response) {
-    if (!response.ok) throw new Error('bad')
-    return response.json()
-  }).then(function (record) {
-    if (record) showRecord(record)
-  }).catch(function () {
-    fromFile().catch(function () {
-      show('The certificate could not be checked.')
-    })
+  fromFile().catch(function () {
+    show('The certificate could not be checked.')
   })
 })()

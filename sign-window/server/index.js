@@ -68,6 +68,12 @@ app.get('/', function (req, res) {
   res.redirect(302, '/demo/index.html')
 })
 
+app.get('/sw.js', function (req, res) {
+  res.setHeader('Service-Worker-Allowed', '/')
+  res.setHeader('Content-Type', 'application/javascript; charset=utf-8')
+  res.sendFile(path.join(playerDir, 'sw.js'))
+})
+
 app.get('/player/sw.js', function (req, res) {
   res.setHeader('Service-Worker-Allowed', '/')
   res.setHeader('Content-Type', 'application/javascript; charset=utf-8')

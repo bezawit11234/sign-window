@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: sign-window
+    runtime: docker
+    plan: free
+    dockerfilePath: ./sign-window/Dockerfile
+    dockerContext: ./sign-window
+    healthCheckPath: /demo/index.html
+    envVars:
+      - key: NODE_ENV
+        value: production
